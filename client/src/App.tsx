@@ -44,22 +44,27 @@ export default function App() {
 
     async function LoadRandom() {
 
-        setLoading(true);
+    try {
 
-        try {
+        const creator = await GetRandomStream(language);
 
-            const creator = await GetRandomStream(language);
-
-            setStream(creator);
-
-        }
-        finally {
-
-            setLoading(false);
-
-        }
+        setStream(creator);
 
     }
+
+    catch (error) {
+
+        console.error("Unable to load creator.", error);
+
+    }
+
+    finally {
+
+        setLoading(false);
+
+    }
+
+}
 
     useEffect(() => {
 
