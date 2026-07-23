@@ -9,6 +9,8 @@ class StreamCache {
 
     private history: string[] = [];
 
+private categoryHistory: string[] = [];
+
     public async refresh(): Promise<void> {
 
         try {
@@ -99,15 +101,44 @@ if (bucket.length === 0)
         stream.viewer_count <= 200
     );
 
-const stream =
+let stream =
     bucket[Math.floor(Math.random() * bucket.length)];
+
+const categoryUsed = this.categoryHistory.includes(stream.game_name);
+
+if (categoryUsed) {
+
+    const differentCategory =
+        bucket.filter(item =>
+            !this.categoryHistory.includes(item.game_name)
+        );
+
+    if (differentCategory.length > 0) {
+
+        stream =
+            differentCategory[
+                Math.floor(Math.random() * differentCategory.length)
+            ];
+
+    }
+
+}
+
         this.history.push(stream.user_login);
 
-        if (this.history.length > this.historyLimit) {
+if (this.history.length > this.historyLimit) {
 
-            this.history.shift();
+    this.history.shift();
 
-        }
+}
+
+this.categoryHistory.push(stream.game_name);
+
+if (this.categoryHistory.length > 10) {
+
+    this.categoryHistory.shift();
+
+}
 
         return stream;
 

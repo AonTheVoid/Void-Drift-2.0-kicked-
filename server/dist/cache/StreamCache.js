@@ -8,6 +8,7 @@ class StreamCache {
     streams = [];
     historyLimit = 50;
     history = [];
+    categoryHistory = [];
     async refresh() {
         try {
             this.streams = await TwitchService_1.default.getLiveStreams();
@@ -51,10 +52,22 @@ class StreamCache {
         if (bucket.length === 0)
             bucket = available.filter(stream => stream.viewer_count >= 5 &&
                 stream.viewer_count <= 200);
-        const stream = bucket[Math.floor(Math.random() * bucket.length)];
+        let stream = bucket[Math.floor(Math.random() * bucket.length)];
+        const categoryUsed = this.categoryHistory.includes(stream.game_name);
+        if (categoryUsed) {
+            const differentCategory = bucket.filter(item => !this.categoryHistory.includes(item.game_name));
+            if (differentCategory.length > 0) {
+                stream =
+                    differentCategory[Math.floor(Math.random() * differentCategory.length)];
+            }
+        }
         this.history.push(stream.user_login);
         if (this.history.length > this.historyLimit) {
             this.history.shift();
+        }
+        this.categoryHistory.push(stream.game_name);
+        if (this.categoryHistory.length > 10) {
+            this.categoryHistory.shift();
         }
         return stream;
     }
