@@ -1,4 +1,4 @@
-﻿import type { Stream } from "../services/Api";
+import type { Stream } from "../services/Api";
 
 interface Props {
     stream: Stream;
@@ -7,7 +7,7 @@ interface Props {
 export default function DriftPlayer({ stream }: Props) {
 
     const src =
-        `https://player.twitch.tv/?channel=${stream.channelLogin}&parent=localhost&autoplay=true&muted=false`;
+        `https://player.twitch.tv/?channel=${stream.channelLogin}&parent=drift.aonthevoid.com&autoplay=true&muted=false`;
 
     return (
         <div className="drift-player">

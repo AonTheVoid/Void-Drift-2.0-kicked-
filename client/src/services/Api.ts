@@ -22,7 +22,7 @@
 
 }
 
-const API = "http://localhost:3000/api";
+const API = "/api";
 
 export async function GetRandomStream(language: string = "any"): Promise<Stream> {
 

@@ -28,16 +28,32 @@ class TwitchService {
     }
     async getLiveStreams() {
         await this.authenticate();
-        const response = await axios_1.default.get(Twitch_1.default.StreamsUrl, {
-            headers: {
-                Authorization: `Bearer ${this.accessToken}`,
-                "Client-Id": Twitch_1.default.ClientId
-            },
+        const headers = {
+            Authorization: `Bearer ${this.accessToken}`,
+            "Client-Id": Twitch_1.default.ClientId
+        };
+        const gamesResponse = await axios_1.default.get(Twitch_1.default.GamesUrl, {
+            headers,
             params: {
-                first: Twitch_1.default.MaxStreams
+                first: 25
             }
         });
-        return response.data.data;
+        const games = gamesResponse.data.data;
+        const randomGames = games
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 10);
+        const streams = [];
+        for (const game of randomGames) {
+            const response = await axios_1.default.get(Twitch_1.default.StreamsUrl, {
+                headers,
+                params: {
+                    game_id: game.id,
+                    first: 100
+                }
+            });
+            streams.push(...response.data.data);
+        }
+        return streams;
     }
 }
 exports.default = new TwitchService();

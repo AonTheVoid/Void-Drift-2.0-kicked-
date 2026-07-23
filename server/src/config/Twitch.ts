@@ -12,6 +12,8 @@ export const TwitchConfig = {
 
     StreamsUrl: "https://api.twitch.tv/helix/streams",
 
+GamesUrl: "https://api.twitch.tv/helix/games/top",
+
     CacheRefreshSeconds: 60,
 
     MaxStreams: 100

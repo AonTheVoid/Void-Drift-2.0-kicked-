@@ -30,6 +30,10 @@ export interface TwitchStream {
 export interface TwitchStreamsResponse {
 
     data: TwitchStream[];
+
+    pagination?: {
+        cursor?: string;
+    };
 }
 
 export interface OAuthResponse {
