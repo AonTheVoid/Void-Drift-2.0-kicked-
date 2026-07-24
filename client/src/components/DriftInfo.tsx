@@ -10,14 +10,14 @@ export default function DriftInfo({ stream }: Props) {
 
         <div className="drift-info">
 
+            <h3 className="stream-name">
+                {stream.channelName}
+            </h3>
+
             <h2>{stream.title}</h2>
 
-            <p className="stream-category">
-                {stream.category}
-            </p>
-
             <span className="stream-live">
-                🔴 Live • {stream.viewers.toLocaleString()} watching
+                🔴 Live • {stream.category} • {stream.viewers.toLocaleString()} watching
             </span>
 
         </div>
