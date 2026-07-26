@@ -6,29 +6,87 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const TwitchService_1 = __importDefault(require("../services/TwitchService"));
 class StreamCache {
     streams = [];
+    topGameStreams = [];
     historyLimit = 50;
     history = [];
     categoryHistory = [];
     async refresh() {
         try {
-            this.streams = await TwitchService_1.default.getLiveStreams();
+            this.streams =
+                await TwitchService_1.default.getLiveStreams();
             console.log(`Loaded ${this.streams.length} live streams.`);
-            console.log("Viewer range:", Math.min(...this.streams.map(s => s.viewer_count)), "-", Math.max(...this.streams.map(s => s.viewer_count)));
         }
         catch (error) {
             console.error("Failed to refresh Twitch cache.");
             console.error(error);
         }
     }
-    getRandom(language = "any") {
-        if (this.streams.length === 0)
+    async refreshTopGame() {
+        try {
+            this.topGameStreams =
+                await TwitchService_1.default.getTopGameStreams();
+            console.log(`Loaded ${this.topGameStreams.length} top game streams.`);
+        }
+        catch (error) {
+            console.error("Failed to refresh Top Game cache.");
+            console.error(error);
+        }
+    }
+    getRandom(language = "any", mode = "random") {
+        let source = mode === "top-game"
+            ? this.topGameStreams
+            : this.streams;
+        if (source.length === 0)
             return null;
-        let pool = this.streams.filter(stream => stream.viewer_count >= 5 &&
-            stream.viewer_count <= 200);
+        let pool = [];
+        switch (mode) {
+            case "top-game":
+                pool = source;
+                break;
+            case "just-starting":
+                pool = source.filter(stream => {
+                    const started = new Date(stream.started_at).getTime();
+                    const minutes = (Date.now() - started) / 60000;
+                    return (minutes <= 30 &&
+                        stream.viewer_count >= 5 &&
+                        stream.viewer_count <= 200);
+                });
+                break;
+            case "partner-push":
+                pool = source.filter(stream => stream.viewer_count >= 40 &&
+                    stream.viewer_count <= 199);
+                break;
+            case "less-than-10":
+                pool = source.filter(stream => stream.viewer_count >= 5 &&
+                    stream.viewer_count <= 9);
+                break;
+            case "on-the-rise":
+                pool = source.filter(stream => stream.viewer_count >= 200 &&
+                    stream.viewer_count <= 999);
+                break;
+            default:
+                pool = source.filter(stream => stream.viewer_count >= 5 &&
+                    stream.viewer_count <= 200);
+                break;
+        }
         if (language !== "any") {
             pool = pool.filter(stream => stream.language.toLowerCase() === language);
-            if (pool.length === 0)
-                return null;
+        }
+        if (pool.length === 0)
+            return null;
+        if (mode === "top-game") {
+            return pool[Math.floor(Math.random() * pool.length)];
+        }
+        if (mode === "on-the-rise") {
+            const available = pool.filter(stream => !this.history.includes(stream.user_login));
+            const selection = available.length > 0
+                ? available
+                : pool;
+            const stream = selection[Math.floor(Math.random() * selection.length)];
+            this.history.push(stream.user_login);
+            if (this.history.length > this.historyLimit)
+                this.history.shift();
+            return stream;
         }
         let available = pool.filter(stream => !this.history.includes(stream.user_login));
         if (available.length === 0) {
@@ -62,13 +120,11 @@ class StreamCache {
             }
         }
         this.history.push(stream.user_login);
-        if (this.history.length > this.historyLimit) {
+        if (this.history.length > this.historyLimit)
             this.history.shift();
-        }
         this.categoryHistory.push(stream.game_name);
-        if (this.categoryHistory.length > 10) {
+        if (this.categoryHistory.length > 10)
             this.categoryHistory.shift();
-        }
         return stream;
     }
 }

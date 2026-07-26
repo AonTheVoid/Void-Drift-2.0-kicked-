@@ -18,13 +18,26 @@ const SupportedLanguages = new Set([
     "ko",
     "ru"
 ]);
+const SupportedModes = new Set([
+    "random",
+    "just-starting",
+    "less-than-10",
+    "partner-push",
+    "top-game",
+    "on-the-rise"
+]);
 router.get("/", (req, res) => {
     let language = typeof req.query.language === "string"
         ? req.query.language.toLowerCase()
         : "any";
     if (!SupportedLanguages.has(language))
         language = "any";
-    const stream = StreamCache_1.default.getRandom(language);
+    let mode = typeof req.query.mode === "string"
+        ? req.query.mode.toLowerCase()
+        : "random";
+    if (!SupportedModes.has(mode))
+        mode = "random";
+    const stream = StreamCache_1.default.getRandom(language, mode);
     if (!stream) {
         return res.status(503).json({
             error: "No live streams available."

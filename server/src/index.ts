@@ -28,10 +28,12 @@ app.use("/api/random", RandomRoute);
 async function start(): Promise<void> {
 
     await StreamCache.refresh();
+    await StreamCache.refreshTopGame();
 
     setInterval(async () => {
 
         await StreamCache.refresh();
+        await StreamCache.refreshTopGame();
 
     }, TwitchConfig.CacheRefreshSeconds * 1000);
 

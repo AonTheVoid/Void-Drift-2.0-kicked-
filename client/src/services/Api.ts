@@ -1,4 +1,12 @@
-﻿export interface Stream {
+﻿export type DiscoveryMode =
+    | "random"
+    | "just-starting"
+    | "less-than-10"
+    | "partner-push"
+    | "top-game"
+    | "on-the-rise";
+
+export interface Stream {
 
     channelName: string;
 
@@ -24,10 +32,13 @@
 
 const API = "/api";
 
-export async function GetRandomStream(language: string = "any"): Promise<Stream> {
+export async function GetRandomStream(
+    language: string = "any",
+    mode: DiscoveryMode = "random"
+): Promise<Stream> {
 
     const response = await fetch(
-        `${API}/random?language=${encodeURIComponent(language)}`
+        `${API}/random?language=${encodeURIComponent(language)}&mode=${encodeURIComponent(mode)}`
     );
 
     if (!response.ok) {

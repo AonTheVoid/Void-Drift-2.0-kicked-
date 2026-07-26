@@ -5,14 +5,17 @@ import DriftInfo from "./components/DriftInfo";
 import DriftActions from "./components/DriftActions";
 
 import { GetRandomStream } from "./services/Api";
-import type { Stream } from "./services/Api";
+import type { Stream, DiscoveryMode } from "./services/Api";
 
 import "./styles/app.css";
 
 export default function App() {
 
     const [stream, setStream] = useState<Stream | null>(null);
+
     const [loading, setLoading] = useState(true);
+
+    const [mode, setMode] = useState<DiscoveryMode>("random");
 
     const [language, setLanguage] = useState(() => {
 
@@ -44,33 +47,33 @@ export default function App() {
 
     async function LoadRandom() {
 
-    try {
+        try {
 
-        const creator = await GetRandomStream(language);
+            const creator = await GetRandomStream(language, mode);
 
-        setStream(creator);
+            setStream(creator);
+
+        }
+
+        catch (error) {
+
+            console.error("Unable to load creator.", error);
+
+        }
+
+        finally {
+
+            setLoading(false);
+
+        }
 
     }
-
-    catch (error) {
-
-        console.error("Unable to load creator.", error);
-
-    }
-
-    finally {
-
-        setLoading(false);
-
-    }
-
-}
 
     useEffect(() => {
 
         void LoadRandom();
 
-    }, [language]);
+    }, [language, mode]);
 
     if (loading) {
 
@@ -147,6 +150,8 @@ export default function App() {
 
             <DriftActions
                 url={stream.url}
+                mode={mode}
+                onModeChange={setMode}
                 onNext={LoadRandom}
             />
 
@@ -155,4 +160,3 @@ export default function App() {
     );
 
 }
-

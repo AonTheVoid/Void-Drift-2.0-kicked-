@@ -55,5 +55,27 @@ class TwitchService {
         }
         return streams;
     }
+    async getTopGameStreams() {
+        await this.authenticate();
+        const headers = {
+            Authorization: `Bearer ${this.accessToken}`,
+            "Client-Id": Twitch_1.default.ClientId
+        };
+        const gamesResponse = await axios_1.default.get(Twitch_1.default.GamesUrl, {
+            headers,
+            params: {
+                first: 1
+            }
+        });
+        const game = gamesResponse.data.data[0];
+        const response = await axios_1.default.get(Twitch_1.default.StreamsUrl, {
+            headers,
+            params: {
+                game_id: game.id,
+                first: 100
+            }
+        });
+        return response.data.data;
+    }
 }
 exports.default = new TwitchService();

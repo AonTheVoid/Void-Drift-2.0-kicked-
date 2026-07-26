@@ -196,6 +196,14 @@ select{
     gap:16px;
 }
 
+.drift-controls{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
 .drift-button{
     background:#ffffff;
     color:#000;
@@ -209,6 +217,22 @@ select{
     transition:
         transform .2s ease,
         box-shadow .2s ease;
+}
+
+.drift-mode{
+    background:rgba(17,17,17,.82);
+    backdrop-filter:blur(10px);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:999px;
+    padding:16px 22px;
+    cursor:pointer;
+    transition:border-color .2s ease;
+}
+
+.drift-mode:focus{
+    outline:none;
+    border-color:#ffffff;
 }
 
 .drift-button:hover{
@@ -271,6 +295,18 @@ select{
         width:100%;
         max-width:320px;
     }
+
+.drift-controls{
+    width:100%;
+    flex-direction:column;
+}
+
+.drift-mode{
+    width:100%;
+    max-width:360px;
+    height:54px;
+}
+
 }
 
 /* ==========================================

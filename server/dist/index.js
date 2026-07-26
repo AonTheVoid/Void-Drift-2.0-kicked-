@@ -22,8 +22,10 @@ app.get("/api/health", (_req, res) => {
 app.use("/api/random", RandomRoute_1.default);
 async function start() {
     await StreamCache_1.default.refresh();
+    await StreamCache_1.default.refreshTopGame();
     setInterval(async () => {
         await StreamCache_1.default.refresh();
+        await StreamCache_1.default.refreshTopGame();
     }, Twitch_1.default.CacheRefreshSeconds * 1000);
     app.listen(PORT, () => {
         console.log("");
