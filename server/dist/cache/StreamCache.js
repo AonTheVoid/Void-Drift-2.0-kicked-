@@ -53,8 +53,30 @@ class StreamCache {
                 });
                 break;
             case "partner-push":
-                pool = source.filter(stream => stream.viewer_count >= 40 &&
-                    stream.viewer_count <= 199);
+                const positivePhrases = [
+                    "partner push",
+                    "road to partner",
+                    "road2partner",
+                    "partner grind",
+                    "grinding for partner",
+                    "grinding partner",
+                    "push to partner",
+                    "push for partner",
+                    "partner journey",
+                    "help me reach partner",
+                ];
+                const negativePhrases = [
+                    "partnered",
+                    "official partner"
+                ];
+                pool = source.filter(stream => {
+                    if (stream.viewer_count < 40 || stream.viewer_count > 199)
+                        return false;
+                    const title = stream.title.toLowerCase();
+                    if (negativePhrases.some(p => title.includes(p)))
+                        return false;
+                    return positivePhrases.some(p => title.includes(p));
+                });
                 break;
             case "less-than-10":
                 pool = source.filter(stream => stream.viewer_count >= 5 &&

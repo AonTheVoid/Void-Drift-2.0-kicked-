@@ -35,23 +35,36 @@ class TwitchService {
         const gamesResponse = await axios_1.default.get(Twitch_1.default.GamesUrl, {
             headers,
             params: {
-                first: 25
+                first: 50
             }
         });
         const games = gamesResponse.data.data;
         const randomGames = games
             .sort(() => Math.random() - 0.5)
-            .slice(0, 10);
+            .slice(0, 20);
         const streams = [];
         for (const game of randomGames) {
-            const response = await axios_1.default.get(Twitch_1.default.StreamsUrl, {
+            // First 100 streams
+            const page1 = await axios_1.default.get(Twitch_1.default.StreamsUrl, {
                 headers,
                 params: {
                     game_id: game.id,
                     first: 100
                 }
             });
-            streams.push(...response.data.data);
+            streams.push(...page1.data.data);
+            // Next 100 streams
+            if (page1.data.pagination?.cursor) {
+                const page2 = await axios_1.default.get(Twitch_1.default.StreamsUrl, {
+                    headers,
+                    params: {
+                        game_id: game.id,
+                        first: 100,
+                        after: page1.data.pagination.cursor
+                    }
+                });
+                streams.push(...page2.data.data);
+            }
         }
         return streams;
     }
@@ -64,18 +77,36 @@ class TwitchService {
         const gamesResponse = await axios_1.default.get(Twitch_1.default.GamesUrl, {
             headers,
             params: {
-                first: 1
+                first: 5
             }
         });
-        const game = gamesResponse.data.data[0];
-        const response = await axios_1.default.get(Twitch_1.default.StreamsUrl, {
-            headers,
-            params: {
-                game_id: game.id,
-                first: 100
+        const games = gamesResponse.data.data;
+        const streams = [];
+        for (const game of games) {
+            const page1 = await axios_1.default.get(Twitch_1.default.StreamsUrl, {
+                headers,
+                params: {
+                    game_id: game.id,
+                    first: 100
+                }
+            });
+            streams.push(...page1.data.data.filter(stream => stream.viewer_count >= 5 &&
+                stream.viewer_count <= 200));
+            if (page1.data.pagination?.cursor) {
+                const page2 = await axios_1.default.get(Twitch_1.default.StreamsUrl, {
+                    headers,
+                    params: {
+                        game_id: game.id,
+                        first: 100,
+                        after: page1.data.pagination.cursor
+                    }
+                });
+                streams.push(...page2.data.data.filter(stream => stream.viewer_count >= 5 &&
+                    stream.viewer_count <= 200));
             }
-        });
-        return response.data.data;
+        }
+        streams.sort(() => Math.random() - 0.5);
+        return streams;
     }
 }
 exports.default = new TwitchService();
