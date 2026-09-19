@@ -37,7 +37,11 @@ router.get("/", (req, res) => {
         : "random";
     if (!SupportedModes.has(mode))
         mode = "random";
-    const stream = StreamCache_1.default.getRandom(language, mode);
+    const gameId = typeof req.query.gameId === "string" &&
+        /^\d+$/.test(req.query.gameId)
+        ? req.query.gameId
+        : undefined;
+    const stream = StreamCache_1.default.getRandom(language, mode, gameId);
     if (!stream) {
         return res.status(503).json({
             error: "No live streams available."

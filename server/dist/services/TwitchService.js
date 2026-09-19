@@ -26,6 +26,21 @@ class TwitchService {
                 ((response.data.expires_in - 60) * 1000);
         console.log("Twitch OAuth token acquired.");
     }
+    async searchCategories(query) {
+        await this.authenticate();
+        const headers = {
+            Authorization: `Bearer ${this.accessToken}`,
+            "Client-Id": Twitch_1.default.ClientId
+        };
+        const response = await axios_1.default.get(Twitch_1.default.SearchCategoriesUrl, {
+            headers,
+            params: {
+                query,
+                first: 10
+            }
+        });
+        return response.data.data;
+    }
     async getLiveStreams() {
         await this.authenticate();
         const headers = {

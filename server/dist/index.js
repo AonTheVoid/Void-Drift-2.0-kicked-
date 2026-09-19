@@ -8,6 +8,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const StreamCache_1 = __importDefault(require("./cache/StreamCache"));
 const RandomRoute_1 = __importDefault(require("./routes/RandomRoute"));
+const SearchGamesRoute_1 = __importDefault(require("./routes/SearchGamesRoute"));
 const Twitch_1 = __importDefault(require("./config/Twitch"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -20,6 +21,7 @@ app.get("/api/health", (_req, res) => {
     });
 });
 app.use("/api/random", RandomRoute_1.default);
+app.use("/api/search-games", SearchGamesRoute_1.default);
 async function start() {
     await StreamCache_1.default.refresh();
     await StreamCache_1.default.refreshTopGame();

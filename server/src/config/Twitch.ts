@@ -12,7 +12,9 @@ export const TwitchConfig = {
 
     StreamsUrl: "https://api.twitch.tv/helix/streams",
 
-GamesUrl: "https://api.twitch.tv/helix/games/top",
+    GamesUrl: "https://api.twitch.tv/helix/games/top",
+
+    SearchCategoriesUrl: "https://api.twitch.tv/helix/search/categories",
 
     CacheRefreshSeconds: 60,
 

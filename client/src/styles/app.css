@@ -204,6 +204,144 @@ select{
     flex-wrap:wrap;
 }
 
+.game-search {
+    position: relative;
+    width: 260px;
+}
+
+.game-search-input {
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(17, 17, 17, 0.82);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    padding: 12px 18px;
+    outline: none;
+    font: inherit;
+}
+
+.game-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.game-search-input:focus {
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.game-results {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(100% + 8px);
+    max-height: 280px;
+    overflow-y: auto;
+    background: rgba(12, 12, 12, 0.96);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    padding: 6px;
+    z-index: 20;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.game-result {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+}
+
+.game-result:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.game-result img {
+    width: 36px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.game-result span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.game-search-status {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(100% + 8px);
+    padding: 12px 16px;
+    background: rgba(12, 12, 12, 0.96);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 14px;
+    z-index: 20;
+}
+
+.selected-game {
+    width: 260px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(17, 17, 17, 0.82);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    padding: 5px 8px 5px 6px;
+}
+
+.selected-game img {
+    width: 32px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.selected-game span {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.clear-game {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.clear-game:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+
 .drift-button{
     background:#ffffff;
     color:#000;
@@ -299,6 +437,11 @@ select{
 .drift-controls{
     width:100%;
     flex-direction:column;
+}
+
+.game-search,
+.selected-game {
+    width: 100%;
 }
 
 .drift-mode{

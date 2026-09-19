@@ -4,25 +4,28 @@ import DriftPlayer from "./components/DriftPlayer";
 import DriftInfo from "./components/DriftInfo";
 import DriftActions from "./components/DriftActions";
 
-import { GetRandomStream } from "./services/Api";
-import type { Stream, DiscoveryMode } from "./services/Api";
+import {
+    GetRandomStream,
+    SearchGames
+} from "./services/Api";
+
+import type {
+    Stream,
+    DiscoveryMode,
+    GameResult
+} from "./services/Api";
 
 import "./styles/app.css";
 
 export default function App() {
-
     const [stream, setStream] = useState<Stream | null>(null);
-
     const [loading, setLoading] = useState(true);
-
     const [mode, setMode] = useState<DiscoveryMode>("random");
 
     const [language, setLanguage] = useState(() => {
-
         const saved = localStorage.getItem("void-language");
 
-        if (saved)
-            return saved;
+        if (saved) return saved;
 
         const browser = navigator.language.toLowerCase();
 
@@ -36,69 +39,89 @@ export default function App() {
         if (browser.startsWith("ru")) return "ru";
 
         return "any";
-
     });
 
+    const [gameQuery, setGameQuery] = useState("");
+    const [gameResults, setGameResults] = useState<GameResult[]>([]);
+    const [selectedGame, setSelectedGame] = useState<GameResult | null>(null);
+    const [searchingGames, setSearchingGames] = useState(false);
+
     useEffect(() => {
-
         localStorage.setItem("void-language", language);
-
     }, [language]);
 
     async function LoadRandom() {
+        setLoading(true);
 
         try {
-
-            const creator = await GetRandomStream(language, mode);
+            const creator = await GetRandomStream(
+                language,
+                mode,
+                selectedGame?.id
+            );
 
             setStream(creator);
-
-        }
-
-        catch (error) {
-
+        } catch (error) {
             console.error("Unable to load creator.", error);
-
-        }
-
-        finally {
-
+            setStream(null);
+        } finally {
             setLoading(false);
-
         }
-
     }
 
     useEffect(() => {
-
         void LoadRandom();
+    }, [language, mode, selectedGame]);
 
-    }, [language, mode]);
+    useEffect(() => {
+        const query = gameQuery.trim();
+
+        if (!query) {
+            setGameResults([]);
+            setSearchingGames(false);
+            return;
+        }
+
+        const timeout = window.setTimeout(async () => {
+            try {
+                setSearchingGames(true);
+
+                const results = await SearchGames(query);
+
+                setGameResults(results);
+            } catch (error) {
+                console.error("Unable to search games.", error);
+                setGameResults([]);
+            } finally {
+                setSearchingGames(false);
+            }
+        }, 300);
+
+        return () => window.clearTimeout(timeout);
+    }, [gameQuery]);
+
+    function SelectGame(game: GameResult) {
+        setSelectedGame(game);
+        setGameQuery("");
+        setGameResults([]);
+    }
+
+    function ClearGame() {
+        setSelectedGame(null);
+        setGameQuery("");
+        setGameResults([]);
+    }
 
     if (loading) {
-
-        return (
-            <div className="loading">
-                Loading...
-            </div>
-        );
-
+        return <div className="loading">Loading...</div>;
     }
 
     if (!stream) {
-
-        return (
-            <div className="loading">
-                Unable to load creator.
-            </div>
-        );
-
+        return <div className="loading">Unable to load creator.</div>;
     }
 
     return (
-
         <div className="app">
-
             <video
                 className="background-video"
                 autoPlay
@@ -106,16 +129,12 @@ export default function App() {
                 loop
                 playsInline
             >
-                <source
-                    src="/background.mp4"
-                    type="video/mp4"
-                />
+                <source src="/background.mp4" type="video/mp4" />
             </video>
 
             <div className="background-overlay" />
 
             <header className="app-header">
-
                 <img
                     src="/logo.png"
                     alt="Void Drift"
@@ -141,7 +160,6 @@ export default function App() {
                     <option value="ko">🇰🇷 Korean</option>
                     <option value="ru">🇷🇺 Russian</option>
                 </select>
-
             </header>
 
             <DriftPlayer stream={stream} />
@@ -153,10 +171,14 @@ export default function App() {
                 mode={mode}
                 onModeChange={setMode}
                 onNext={LoadRandom}
+                gameQuery={gameQuery}
+                onGameQueryChange={setGameQuery}
+                gameResults={gameResults}
+                selectedGame={selectedGame}
+                onGameSelect={SelectGame}
+                onGameClear={ClearGame}
+                searchingGames={searchingGames}
             />
-
         </div>
-
     );
-
 }

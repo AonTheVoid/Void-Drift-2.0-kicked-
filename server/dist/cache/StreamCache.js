@@ -32,7 +32,7 @@ class StreamCache {
             console.error(error);
         }
     }
-    getRandom(language = "any", mode = "random") {
+    getRandom(language = "any", mode = "random", gameId) {
         let source = mode === "top-game"
             ? this.topGameStreams
             : this.streams;
@@ -63,14 +63,15 @@ class StreamCache {
                     "push to partner",
                     "push for partner",
                     "partner journey",
-                    "help me reach partner",
+                    "help me reach partner"
                 ];
                 const negativePhrases = [
                     "partnered",
                     "official partner"
                 ];
                 pool = source.filter(stream => {
-                    if (stream.viewer_count < 40 || stream.viewer_count > 199)
+                    if (stream.viewer_count < 40 ||
+                        stream.viewer_count > 199)
                         return false;
                     const title = stream.title.toLowerCase();
                     if (negativePhrases.some(p => title.includes(p)))
@@ -91,8 +92,13 @@ class StreamCache {
                     stream.viewer_count <= 200);
                 break;
         }
+        // Language filter
         if (language !== "any") {
             pool = pool.filter(stream => stream.language.toLowerCase() === language);
+        }
+        // Game filter
+        if (gameId) {
+            pool = pool.filter(stream => stream.game_id === gameId);
         }
         if (pool.length === 0)
             return null;
@@ -138,7 +144,8 @@ class StreamCache {
             const differentCategory = bucket.filter(item => !this.categoryHistory.includes(item.game_name));
             if (differentCategory.length > 0) {
                 stream =
-                    differentCategory[Math.floor(Math.random() * differentCategory.length)];
+                    differentCategory[Math.floor(Math.random() *
+                        differentCategory.length)];
             }
         }
         this.history.push(stream.user_login);

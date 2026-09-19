@@ -43,7 +43,17 @@ router.get("/", (req, res) => {
     if (!SupportedModes.has(mode))
         mode = "random";
 
-    const stream = StreamCache.getRandom(language, mode);
+    const gameId =
+        typeof req.query.gameId === "string" &&
+        /^\d+$/.test(req.query.gameId)
+            ? req.query.gameId
+            : undefined;
+
+    const stream = StreamCache.getRandom(
+        language,
+        mode,
+        gameId
+    );
 
     if (!stream) {
 

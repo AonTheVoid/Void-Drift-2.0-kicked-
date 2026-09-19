@@ -20,11 +20,16 @@ class StreamCache {
             this.streams =
                 await TwitchService.getLiveStreams();
 
-            console.log(`Loaded ${this.streams.length} live streams.`);
+            console.log(
+                `Loaded ${this.streams.length} live streams.`
+            );
 
         } catch (error) {
 
-            console.error("Failed to refresh Twitch cache.");
+            console.error(
+                "Failed to refresh Twitch cache."
+            );
+
             console.error(error);
 
         }
@@ -38,11 +43,16 @@ class StreamCache {
             this.topGameStreams =
                 await TwitchService.getTopGameStreams();
 
-            console.log(`Loaded ${this.topGameStreams.length} top game streams.`);
+            console.log(
+                `Loaded ${this.topGameStreams.length} top game streams.`
+            );
 
         } catch (error) {
 
-            console.error("Failed to refresh Top Game cache.");
+            console.error(
+                "Failed to refresh Top Game cache."
+            );
+
             console.error(error);
 
         }
@@ -51,7 +61,8 @@ class StreamCache {
 
     public getRandom(
         language: string = "any",
-        mode: string = "random"
+        mode: string = "random",
+        gameId?: string
     ): TwitchStream | null {
 
         let source =
@@ -94,39 +105,49 @@ class StreamCache {
 
             case "partner-push":
 
-    const positivePhrases = [
-        "partner push",
-        "road to partner",
-        "road2partner",
-        "partner grind",
-        "grinding for partner",
-        "grinding partner",
-        "push to partner",
-        "push for partner",
-        "partner journey",
-        "help me reach partner",
-    ];
+                const positivePhrases = [
+                    "partner push",
+                    "road to partner",
+                    "road2partner",
+                    "partner grind",
+                    "grinding for partner",
+                    "grinding partner",
+                    "push to partner",
+                    "push for partner",
+                    "partner journey",
+                    "help me reach partner"
+                ];
 
-    const negativePhrases = [
-        "partnered",
-        "official partner"
-    ];
+                const negativePhrases = [
+                    "partnered",
+                    "official partner"
+                ];
 
-    pool = source.filter(stream => {
+                pool = source.filter(stream => {
 
-        if (stream.viewer_count < 40 || stream.viewer_count > 199)
-            return false;
+                    if (
+                        stream.viewer_count < 40 ||
+                        stream.viewer_count > 199
+                    )
+                        return false;
 
-        const title = stream.title.toLowerCase();
+                    const title =
+                        stream.title.toLowerCase();
 
-        if (negativePhrases.some(p => title.includes(p)))
-            return false;
+                    if (
+                        negativePhrases.some(
+                            p => title.includes(p)
+                        )
+                    )
+                        return false;
 
-        return positivePhrases.some(p => title.includes(p));
+                    return positivePhrases.some(
+                        p => title.includes(p)
+                    );
 
-    });
+                });
 
-    break;
+                break;
 
             case "less-than-10":
 
@@ -154,13 +175,22 @@ class StreamCache {
                 );
 
                 break;
-
         }
 
+        // Language filter
         if (language !== "any") {
 
             pool = pool.filter(stream =>
                 stream.language.toLowerCase() === language
+            );
+
+        }
+
+        // Game filter
+        if (gameId) {
+
+            pool = pool.filter(stream =>
+                stream.game_id === gameId
             );
 
         }
@@ -171,7 +201,9 @@ class StreamCache {
         if (mode === "top-game") {
 
             return pool[
-                Math.floor(Math.random() * pool.length)
+                Math.floor(
+                    Math.random() * pool.length
+                )
             ];
 
         }
@@ -188,7 +220,11 @@ class StreamCache {
                     : pool;
 
             const stream =
-                selection[Math.floor(Math.random() * selection.length)];
+                selection[
+                    Math.floor(
+                        Math.random() * selection.length
+                    )
+                ];
 
             this.history.push(stream.user_login);
 
@@ -244,23 +280,34 @@ class StreamCache {
             );
 
         let stream =
-            bucket[Math.floor(Math.random() * bucket.length)];
+            bucket[
+                Math.floor(
+                    Math.random() * bucket.length
+                )
+            ];
 
         const categoryUsed =
-            this.categoryHistory.includes(stream.game_name);
+            this.categoryHistory.includes(
+                stream.game_name
+            );
 
         if (categoryUsed) {
 
             const differentCategory =
                 bucket.filter(item =>
-                    !this.categoryHistory.includes(item.game_name)
+                    !this.categoryHistory.includes(
+                        item.game_name
+                    )
                 );
 
             if (differentCategory.length > 0) {
 
                 stream =
                     differentCategory[
-                        Math.floor(Math.random() * differentCategory.length)
+                        Math.floor(
+                            Math.random() *
+                            differentCategory.length
+                        )
                     ];
 
             }
