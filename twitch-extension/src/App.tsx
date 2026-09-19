@@ -27,7 +27,7 @@ interface GameResult {
     boxArtUrl: string;
 }
 
-const API_URL = "/api";
+const API_URL = "https://drift.aonthevoid.com/api";
 
 const languages: {
     value: string;
@@ -253,7 +253,7 @@ function App() {
                 playsInline
             >
                 <source
-                    src="/background.mp4"
+                    src="./background.mp4"
                     type="video/mp4"
                 />
             </video>
@@ -264,7 +264,7 @@ function App() {
 
                 <img
                     className="app-logo"
-                    src="/logo.png"
+                    src="./logo.png"
                     alt="Void Drift"
                 />
 

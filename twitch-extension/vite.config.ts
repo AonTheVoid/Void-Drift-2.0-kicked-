@@ -1,9 +1,27 @@
 import fs from 'node:fs'
+import { resolve } from 'node:path'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
+  base: './',
+
   plugins: [react()],
+
+  build: {
+  rollupOptions: {
+    input: {
+      index: resolve(__dirname, 'index.html'),
+      config: resolve(__dirname, 'config.html'),
+    },
+
+    output: {
+      entryFileNames: '[name]-[hash].js',
+      chunkFileNames: '[name]-[hash].js',
+      assetFileNames: '[name]-[hash][extname]',
+    },
+  },
+},
 
   server: {
     https: {
