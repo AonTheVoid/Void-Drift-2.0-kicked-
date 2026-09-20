@@ -19,7 +19,7 @@ import "./styles/app.css";
 
 export default function App() {
     const [stream, setStream] = useState<Stream | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [, setLoading] = useState(true);
     const [mode, setMode] = useState<DiscoveryMode>("random");
 
     const [language, setLanguage] = useState(() => {
