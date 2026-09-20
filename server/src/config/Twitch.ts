@@ -16,7 +16,7 @@ export const TwitchConfig = {
 
     SearchCategoriesUrl: "https://api.twitch.tv/helix/search/categories",
 
-    CacheRefreshSeconds: 60,
+    CacheRefreshSeconds: 145,
 
     MaxStreams: 100
 };

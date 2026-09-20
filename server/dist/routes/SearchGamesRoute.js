@@ -5,8 +5,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const TwitchService_1 = __importDefault(require("../services/TwitchService"));
+const KickService_1 = __importDefault(require("../services/KickService"));
 const router = (0, express_1.Router)();
+const SupportedPlatforms = new Set([
+    "twitch",
+    "kick"
+]);
 router.get("/", async (req, res) => {
+    const platform = typeof req.query.platform === "string"
+        ? req.query.platform.toLowerCase()
+        : "twitch";
+    if (!SupportedPlatforms.has(platform)) {
+        return res.status(400).json({
+            error: "Unsupported platform."
+        });
+    }
     const query = typeof req.query.query === "string"
         ? req.query.query.trim()
         : "";
@@ -21,17 +34,25 @@ router.get("/", async (req, res) => {
         });
     }
     try {
-        const categories = await TwitchService_1.default.searchCategories(query);
-        res.json(categories.map(category => ({
+        if (platform === "twitch") {
+            const categories = await TwitchService_1.default.searchCategories(query);
+            return res.json(categories.map(category => ({
+                id: category.id,
+                name: category.name,
+                boxArtUrl: category.box_art_url
+            })));
+        }
+        const response = await KickService_1.default.searchCategories(query);
+        return res.json(response.data.map(category => ({
             id: category.id,
             name: category.name,
-            boxArtUrl: category.box_art_url
+            boxArtUrl: category.thumbnail
         })));
     }
     catch (error) {
-        console.error("Failed to search Twitch categories.");
+        console.error(`Failed to search ${platform} categories.`);
         console.error(error);
-        res.status(500).json({
+        return res.status(500).json({
             error: "Unable to search games."
         });
     }

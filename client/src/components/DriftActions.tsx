@@ -1,11 +1,15 @@
-﻿import type { DiscoveryMode, GameResult } from "../services/Api";
+﻿import type {
+    Platform,
+    DiscoveryMode,
+    GameResult
+} from "../services/Api";
 
 interface Props {
+    platform: Platform;
     url: string;
     mode: DiscoveryMode;
     onModeChange: (mode: DiscoveryMode) => void;
     onNext: () => void | Promise<void>;
-
     gameQuery: string;
     onGameQueryChange: (query: string) => void;
     gameResults: GameResult[];
@@ -16,6 +20,7 @@ interface Props {
 }
 
 export default function DriftActions({
+    platform,
     url,
     mode,
     onModeChange,
@@ -28,35 +33,65 @@ export default function DriftActions({
     onGameClear,
     searchingGames
 }: Props) {
+
+    const platformName =
+        platform === "twitch"
+            ? "Twitch"
+            : "Kick";
+
     return (
         <div className="drift-actions">
+
             <div className="drift-controls">
+
                 <select
                     className="drift-mode"
                     value={mode}
                     onChange={(e) =>
-                        onModeChange(e.target.value as DiscoveryMode)
+                        onModeChange(
+                            e.target.value as DiscoveryMode
+                        )
                     }
                 >
-                    <option value="random">🌍 Random</option>
-                    <option value="just-starting">⚡ Just Starting</option>
-                    <option value="less-than-10">
-                        👥 Less Than 10 Viewers
+                    <option value="random">
+                        {"\u{1F30D}"} Random
                     </option>
-                    <option value="partner-push">🏆 Partner Push</option>
-                    <option value="top-game">🎯 Top Games</option>
-                    <option value="on-the-rise">📈 On the Rise</option>
+
+                    <option value="just-starting">
+                        {"\u26A1"} Just Starting
+                    </option>
+
+                    <option value="less-than-10">
+                        {"\u{1F465}"} Less Than 10 Viewers
+                    </option>
+
+                    <option value="partner-push">
+                        {"\u{1F3C6}"} Partner Push
+                    </option>
+
+                    <option value="top-game">
+                        {"\u{1F3AF}"} Top Games
+                    </option>
+
+                    <option value="on-the-rise">
+                        {"\u{1F4C8}"} On the Rise
+                    </option>
                 </select>
 
                 <div className="game-search">
+
                     {selectedGame ? (
+
                         <div className="selected-game">
+
                             <img
                                 src={selectedGame.boxArtUrl}
                                 alt=""
                             />
 
-                            <span>{selectedGame.name}</span>
+                            <span>
+                                {selectedGame.name}
+                            </span>
 
                             <button
                                 type="button"
@@ -66,8 +101,11 @@ export default function DriftActions({
                             >
                                 ×
                             </button>
+
                         </div>
+
                     ) : (
+
                         <>
                             <input
                                 className="game-search-input"
@@ -75,7 +113,9 @@ export default function DriftActions({
                                 placeholder="Search a game..."
                                 value={gameQuery}
                                 onChange={(e) =>
-                                    onGameQueryChange(e.target.value)
+                                    onGameQueryChange(
+                                        e.target.value
+                                    )
                                 }
                             />
 
@@ -85,48 +125,65 @@ export default function DriftActions({
                                 </div>
                             )}
 
-                            {!searchingGames && gameResults.length > 0 && (
-                                <div className="game-results">
-                                    {gameResults.map((game) => (
-                                        <button
-                                            type="button"
-                                            className="game-result"
-                                            key={game.id}
-                                            onClick={() =>
-                                                onGameSelect(game)
-                                            }
-                                        >
-                                            <img
-                                                src={game.boxArtUrl}
-                                                alt=""
-                                            />
+                            {!searchingGames &&
+                                gameResults.length > 0 && (
 
-                                            <span>{game.name}</span>
-                                        </button>
-                                    ))}
+                                <div className="game-results">
+
+                                    {gameResults.map(
+                                        (game) => (
+
+                                            <button
+                                                type="button"
+                                                className="game-result"
+                                                key={game.id}
+                                                onClick={() =>
+                                                    onGameSelect(game)
+                                                }
+                                            >
+                                                <img
+                                                    src={game.boxArtUrl}
+                                                    alt=""
+                                                />
+
+                                                <span>
+                                                    {game.name}
+                                                </span>
+
+                                            </button>
+
+                                        )
+                                    )}
+
                                 </div>
+
                             )}
+
                         </>
+
                     )}
+
                 </div>
 
                 <button
-type="button"
+                    type="button"
                     className="drift-button"
                     onClick={onNext}
                 >
                     DRIFT
                 </button>
+
             </div>
 
             <a
-                className="twitch-link"
+                className={`platform-link ${platform}`}
                 href={url}
                 target="_blank"
                 rel="noreferrer"
             >
-                Watch on Twitch ↗
+                Watch on {platformName} {"\u2197"}
             </a>
+
         </div>
     );
 }

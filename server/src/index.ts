@@ -2,7 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 
-import StreamCache from "./cache/StreamCache";
+import PlatformCacheService from "./services/PlatformCacheService";
 import RandomRoute from "./routes/RandomRoute";
 import SearchGamesRoute from "./routes/SearchGamesRoute";
 import TwitchConfig from "./config/Twitch";
@@ -40,21 +40,19 @@ async function refreshCaches(): Promise<void> {
 
     console.log("");
     console.log(
-        "Refreshing Twitch stream cache..."
+        "Refreshing platform stream caches..."
     );
 
     const startedAt = Date.now();
 
-    await StreamCache.refresh();
-
-    await StreamCache.refreshTopGame();
+    await PlatformCacheService.refreshAll();
 
     const elapsed =
         ((Date.now() - startedAt) / 1000)
             .toFixed(1);
 
     console.log(
-        `Cache refresh completed in ${elapsed}s.`
+        `Platform cache refresh completed in ${elapsed}s.`
     );
 
 }
@@ -85,24 +83,41 @@ async function start(): Promise<void> {
     const refreshLoop =
         async (): Promise<void> => {
 
-            await new Promise(resolve =>
-                setTimeout(
-                    resolve,
-                    TwitchConfig.CacheRefreshSeconds * 1000
-                )
-            );
+            const refreshInterval =
+                TwitchConfig.CacheRefreshSeconds * 1000;
 
-            try {
+            const elapsed =
+                Date.now();
 
-                await refreshCaches();
+            await refreshCaches();
 
-            } catch (error) {
+            const refreshTime =
+                Date.now() - elapsed;
 
-                console.error(
-                    "Cache refresh failed."
+            const remainingDelay =
+                Math.max(
+                    0,
+                    refreshInterval - refreshTime
                 );
 
-                console.error(error);
+            if (remainingDelay > 0) {
+
+                console.log(
+                    `Next platform cache refresh in ${(remainingDelay / 1000).toFixed(1)}s.`
+                );
+
+                await new Promise(resolve =>
+                    setTimeout(
+                        resolve,
+                        remainingDelay
+                    )
+                );
+
+            } else {
+
+                console.log(
+                    "Refresh exceeded configured interval; starting next refresh immediately."
+                );
 
             }
 
@@ -115,3 +130,4 @@ async function start(): Promise<void> {
 }
 
 void start();
+

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
-const StreamCache_1 = __importDefault(require("./cache/StreamCache"));
+const PlatformCacheService_1 = __importDefault(require("./services/PlatformCacheService"));
 const RandomRoute_1 = __importDefault(require("./routes/RandomRoute"));
 const SearchGamesRoute_1 = __importDefault(require("./routes/SearchGamesRoute"));
 const Twitch_1 = __importDefault(require("./config/Twitch"));
@@ -22,13 +22,17 @@ app.get("/api/health", (_req, res) => {
 });
 app.use("/api/random", RandomRoute_1.default);
 app.use("/api/search-games", SearchGamesRoute_1.default);
+async function refreshCaches() {
+    console.log("");
+    console.log("Refreshing platform stream caches...");
+    const startedAt = Date.now();
+    await PlatformCacheService_1.default.refreshAll();
+    const elapsed = ((Date.now() - startedAt) / 1000)
+        .toFixed(1);
+    console.log(`Platform cache refresh completed in ${elapsed}s.`);
+}
 async function start() {
-    await StreamCache_1.default.refresh();
-    await StreamCache_1.default.refreshTopGame();
-    setInterval(async () => {
-        await StreamCache_1.default.refresh();
-        await StreamCache_1.default.refreshTopGame();
-    }, Twitch_1.default.CacheRefreshSeconds * 1000);
+    await refreshCaches();
     app.listen(PORT, () => {
         console.log("");
         console.log("=====================================");
@@ -37,5 +41,21 @@ async function start() {
         console.log(`Listening : http://localhost:${PORT}`);
         console.log("");
     });
+    const refreshLoop = async () => {
+        const refreshInterval = Twitch_1.default.CacheRefreshSeconds * 1000;
+        const elapsed = Date.now();
+        await refreshCaches();
+        const refreshTime = Date.now() - elapsed;
+        const remainingDelay = Math.max(0, refreshInterval - refreshTime);
+        if (remainingDelay > 0) {
+            console.log(`Next platform cache refresh in ${(remainingDelay / 1000).toFixed(1)}s.`);
+            await new Promise(resolve => setTimeout(resolve, remainingDelay));
+        }
+        else {
+            console.log("Refresh exceeded configured interval; starting next refresh immediately.");
+        }
+        void refreshLoop();
+    };
+    void refreshLoop();
 }
-start();
+void start();

@@ -1,4 +1,4 @@
-﻿import type { Stream } from "../services/Api";
+import type { Stream } from "../services/Api";
 
 interface Props {
     stream: Stream;

@@ -1,4 +1,4 @@
-﻿*{
+*{
     margin:0;
     padding:0;
     box-sizing:border-box;
@@ -9,7 +9,7 @@ body,
 #root{
     width:100%;
     height:100%;
-    background:transparent;
+    background:#000;
     color:#f5f5f5;
     font-family:Inter,Segoe UI,sans-serif;
 }
@@ -75,9 +75,21 @@ select{
     z-index:1;
 }
 
-.loading{
+.loading-screen{
+    position:relative;
     width:100%;
-    height:100%;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#000;
+    overflow:hidden;
+}
+
+.loading{
+    position:relative;
+    z-index:1;
+    width:100%;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -126,6 +138,52 @@ select{
 }
 
 /* ===========================
+   PLATFORM SELECTOR
+=========================== */
+
+.platform-selector{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:5px;
+    background:rgba(17,17,17,.82);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:999px;
+}
+
+.platform-button{
+    min-width:120px;
+    padding:11px 24px;
+    border:none;
+    border-radius:999px;
+    background:transparent;
+    color:rgba(255,255,255,.55);
+    cursor:pointer;
+    font-size:15px;
+    font-weight:800;
+    letter-spacing:.06em;
+    transition:
+        background .2s ease,
+        color .2s ease,
+        transform .2s ease;
+}
+
+.platform-button:hover{
+    color:#ffffff;
+}
+
+.platform-button.active{
+    background:#ffffff;
+    color:#000000;
+}
+
+.platform-button.active:hover{
+    transform:translateY(-1px);
+}
+
+/* ===========================
    PLAYER
 =========================== */
 
@@ -160,18 +218,18 @@ select{
     gap:10px;
 }
 
-.stream-name {
-    margin: 0 0 8px;
-    font-size: 2.2rem;
-    font-weight: 900;
-    line-height: 1.1;
+.stream-name{
+    margin:0 0 8px;
+    font-size:2.2rem;
+    font-weight:900;
+    line-height:1.1;
 }
 
 .drift-info h2{
-    margin: 0 0 10px;
-    font-size: 1.3rem;
-    font-weight: 500;
-    line-height: 1.3;
+    margin:0 0 10px;
+    font-size:1.3rem;
+    font-weight:500;
+    line-height:1.3;
 }
 
 .stream-category{
@@ -204,142 +262,142 @@ select{
     flex-wrap:wrap;
 }
 
-.game-search {
-    position: relative;
-    width: 260px;
+.game-search{
+    position:relative;
+    width:260px;
 }
 
-.game-search-input {
-    width: 100%;
-    box-sizing: border-box;
-    background: rgba(17, 17, 17, 0.82);
-    backdrop-filter: blur(10px);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 999px;
-    padding: 12px 18px;
-    outline: none;
-    font: inherit;
+.game-search-input{
+    width:100%;
+    box-sizing:border-box;
+    background:rgba(17,17,17,.82);
+    backdrop-filter:blur(10px);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:999px;
+    padding:12px 18px;
+    outline:none;
+    font:inherit;
 }
 
-.game-search-input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+.game-search-input::placeholder{
+    color:rgba(255,255,255,.5);
 }
 
-.game-search-input:focus {
-    border-color: rgba(255, 255, 255, 0.35);
+.game-search-input:focus{
+    border-color:rgba(255,255,255,.35);
 }
 
-.game-results {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: calc(100% + 8px);
-    max-height: 280px;
-    overflow-y: auto;
-    background: rgba(12, 12, 12, 0.96);
-    backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 14px;
-    padding: 6px;
-    z-index: 20;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+.game-results{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:calc(100% + 8px);
+    max-height:280px;
+    overflow-y:auto;
+    background:rgba(12,12,12,.96);
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:14px;
+    padding:6px;
+    z-index:20;
+    box-shadow:0 12px 40px rgba(0,0,0,.45);
 }
 
-.game-result {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px;
-    border: 0;
-    border-radius: 10px;
-    background: transparent;
-    color: #fff;
-    cursor: pointer;
-    text-align: left;
-    font: inherit;
+.game-result{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px;
+    border:0;
+    border-radius:10px;
+    background:transparent;
+    color:#fff;
+    cursor:pointer;
+    text-align:left;
+    font:inherit;
 }
 
-.game-result:hover {
-    background: rgba(255, 255, 255, 0.08);
+.game-result:hover{
+    background:rgba(255,255,255,.08);
 }
 
-.game-result img {
-    width: 36px;
-    height: 48px;
-    object-fit: cover;
-    border-radius: 5px;
-    flex-shrink: 0;
+.game-result img{
+    width:36px;
+    height:48px;
+    object-fit:cover;
+    border-radius:5px;
+    flex-shrink:0;
 }
 
-.game-result span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.game-result span{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
-.game-search-status {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: calc(100% + 8px);
-    padding: 12px 16px;
-    background: rgba(12, 12, 12, 0.96);
-    backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 12px;
-    color: rgba(255, 255, 255, 0.65);
-    font-size: 14px;
-    z-index: 20;
+.game-search-status{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:calc(100% + 8px);
+    padding:12px 16px;
+    background:rgba(12,12,12,.96);
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:12px;
+    color:rgba(255,255,255,.65);
+    font-size:14px;
+    z-index:20;
 }
 
-.selected-game {
-    width: 260px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(17, 17, 17, 0.82);
-    backdrop-filter: blur(10px);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 999px;
-    padding: 5px 8px 5px 6px;
+.selected-game{
+    width:260px;
+    box-sizing:border-box;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:rgba(17,17,17,.82);
+    backdrop-filter:blur(10px);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:999px;
+    padding:5px 8px 5px 6px;
 }
 
-.selected-game img {
-    width: 32px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 5px;
-    flex-shrink: 0;
+.selected-game img{
+    width:32px;
+    height:40px;
+    object-fit:cover;
+    border-radius:5px;
+    flex-shrink:0;
 }
 
-.selected-game span {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.selected-game span{
+    flex:1;
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
-.clear-game {
-    width: 28px;
-    height: 28px;
-    flex-shrink: 0;
-    border: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.7);
-    cursor: pointer;
-    font-size: 20px;
-    line-height: 1;
+.clear-game{
+    width:28px;
+    height:28px;
+    flex-shrink:0;
+    border:0;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+    color:rgba(255,255,255,.7);
+    cursor:pointer;
+    font-size:20px;
+    line-height:1;
 }
 
-.clear-game:hover {
-    background: rgba(255, 255, 255, 0.16);
-    color: #fff;
+.clear-game:hover{
+    background:rgba(255,255,255,.16);
+    color:#fff;
 }
 
 .drift-button{
@@ -378,14 +436,64 @@ select{
     box-shadow:0 12px 32px rgba(255,255,255,.18);
 }
 
-.twitch-link{
+.platform-link{
     color:#bdbdbd;
     font-size:15px;
     transition:color .2s ease;
 }
 
-.twitch-link:hover{
+.platform-link:hover{
     color:#ffffff;
+}
+
+.platform-link.twitch{
+    color:#bdbdbd;
+}
+
+.platform-link.kick{
+    color:#bdbdbd;
+}
+
+/* ===========================
+   EMPTY STATE
+=========================== */
+
+.empty-state{
+    justify-content:center;
+    min-height:100vh;
+}
+
+.no-streams{
+    width:min(92vw,600px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:14px;
+    padding:48px 32px;
+    background:rgba(10,10,10,.72);
+    backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:24px;
+    box-shadow:
+        0 20px 80px rgba(0,0,0,.45);
+}
+
+.no-streams-icon{
+    font-size:48px;
+    opacity:.7;
+}
+
+.no-streams h2{
+    font-size:28px;
+    font-weight:800;
+}
+
+.no-streams p{
+    color:#aaa;
+    font-size:16px;
+    line-height:1.6;
+    max-width:420px;
 }
 
 /* ===========================
@@ -434,21 +542,21 @@ select{
         max-width:320px;
     }
 
-.drift-controls{
-    width:100%;
-    flex-direction:column;
-}
+    .drift-controls{
+        width:100%;
+        flex-direction:column;
+    }
 
-.game-search,
-.selected-game {
-    width: 100%;
-}
+    .game-search,
+    .selected-game{
+        width:100%;
+    }
 
-.drift-mode{
-    width:100%;
-    max-width:360px;
-    height:54px;
-}
+    .drift-mode{
+        width:100%;
+        max-width:360px;
+        height:54px;
+    }
 
 }
 
@@ -525,7 +633,16 @@ select{
         font-size:17px;
     }
 
-    .twitch-link{
+    .platform-selector{
+        width:100%;
+        max-width:340px;
+    }
+
+    .platform-button{
+        flex:1;
+    }
+
+    .platform-link{
         font-size:15px;
     }
 

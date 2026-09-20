@@ -1,8 +1,15 @@
-﻿import { Router } from "express";
+import { Router } from "express";
 import { randomUUID } from "crypto";
-import StreamCache from "../cache/StreamCache";
+
+import PlatformStreamCache from "../cache/PlatformStreamCache";
+import { DriftPlatform } from "../types/Drift";
 
 const router = Router();
+
+const SupportedPlatforms = new Set([
+    "twitch",
+    "kick"
+]);
 
 const SupportedLanguages = new Set([
     "any",
@@ -27,6 +34,14 @@ const SupportedModes = new Set([
 
 router.get("/", (req, res) => {
 
+    let platform =
+        typeof req.query.platform === "string"
+            ? req.query.platform.toLowerCase()
+            : "twitch";
+
+    if (!SupportedPlatforms.has(platform))
+        platform = "twitch";
+
     let language =
         typeof req.query.language === "string"
             ? req.query.language.toLowerCase()
@@ -43,17 +58,18 @@ router.get("/", (req, res) => {
     if (!SupportedModes.has(mode))
         mode = "random";
 
-    const gameId =
-        typeof req.query.gameId === "string" &&
-        /^\d+$/.test(req.query.gameId)
-            ? req.query.gameId
+    const categoryId =
+        typeof req.query.categoryId === "string"
+            ? req.query.categoryId
             : undefined;
 
-    const stream = StreamCache.getRandom(
-        language,
-        mode,
-        gameId
-    );
+    const stream =
+        PlatformStreamCache.getRandom(
+            platform as DriftPlatform,
+            language,
+            mode,
+            categoryId
+        );
 
     if (!stream) {
 
@@ -67,27 +83,29 @@ router.get("/", (req, res) => {
 
         requestId: randomUUID(),
 
-        channelName: stream.user_name,
+        platform: stream.platform,
 
-        channelLogin: stream.user_login,
+        channelName: stream.channelName,
+
+        channelLogin: stream.channelLogin,
 
         title: stream.title,
 
-        category: stream.game_name,
+        category: stream.category,
+
+        categoryId: stream.categoryId,
 
         language: stream.language,
 
-        viewers: stream.viewer_count,
+        viewers: stream.viewers,
 
-        thumbnail: stream.thumbnail_url
-            .replace("{width}", "1280")
-            .replace("{height}", "720"),
+        thumbnail: stream.thumbnail,
 
-        url: `https://twitch.tv/${stream.user_login}`,
+        url: stream.url,
 
-        startedAt: stream.started_at,
+        startedAt: stream.startedAt,
 
-        mature: stream.is_mature
+        mature: stream.mature
 
     });
 

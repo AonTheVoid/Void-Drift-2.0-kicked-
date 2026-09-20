@@ -8,6 +8,8 @@ const Twitch_1 = __importDefault(require("../config/Twitch"));
 class TwitchService {
     accessToken = "";
     expiresAt = 0;
+    requestsPerMinute = 750;
+    requestTimestamps = [];
     async authenticate() {
         if (this.accessToken.length > 0 &&
             Date.now() < this.expiresAt) {
@@ -20,104 +22,98 @@ class TwitchService {
                 grant_type: "client_credentials"
             }
         });
-        this.accessToken = response.data.access_token;
+        this.accessToken =
+            response.data.access_token;
         this.expiresAt =
             Date.now() +
                 ((response.data.expires_in - 60) * 1000);
         console.log("Twitch OAuth token acquired.");
     }
-    async searchCategories(query) {
+    async waitForRateLimit() {
+        while (true) {
+            const now = Date.now();
+            this.requestTimestamps =
+                this.requestTimestamps.filter(timestamp => now - timestamp < 60_000);
+            if (this.requestTimestamps.length <
+                this.requestsPerMinute) {
+                this.requestTimestamps.push(now);
+                return;
+            }
+            const oldest = this.requestTimestamps[0];
+            const waitTime = 60_000 -
+                (now - oldest) +
+                10;
+            await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
+    }
+    async get(url, params) {
         await this.authenticate();
+        await this.waitForRateLimit();
         const headers = {
             Authorization: `Bearer ${this.accessToken}`,
             "Client-Id": Twitch_1.default.ClientId
         };
-        const response = await axios_1.default.get(Twitch_1.default.SearchCategoriesUrl, {
+        const response = await axios_1.default.get(url, {
             headers,
-            params: {
-                query,
-                first: 10
-            }
+            params
         });
-        return response.data.data;
+        return response.data;
+    }
+    async searchCategories(query) {
+        const response = await this.get(Twitch_1.default.SearchCategoriesUrl, {
+            query,
+            first: 10
+        });
+        return response.data;
     }
     async getLiveStreams() {
-        await this.authenticate();
-        const headers = {
-            Authorization: `Bearer ${this.accessToken}`,
-            "Client-Id": Twitch_1.default.ClientId
-        };
-        const gamesResponse = await axios_1.default.get(Twitch_1.default.GamesUrl, {
-            headers,
-            params: {
-                first: 50
-            }
-        });
-        const games = gamesResponse.data.data;
-        const randomGames = games
-            .sort(() => Math.random() - 0.5)
-            .slice(0, 20);
         const streams = [];
-        for (const game of randomGames) {
-            // First 100 streams
-            const page1 = await axios_1.default.get(Twitch_1.default.StreamsUrl, {
-                headers,
-                params: {
-                    game_id: game.id,
-                    first: 100
-                }
-            });
-            streams.push(...page1.data.data);
-            // Next 100 streams
-            if (page1.data.pagination?.cursor) {
-                const page2 = await axios_1.default.get(Twitch_1.default.StreamsUrl, {
-                    headers,
-                    params: {
-                        game_id: game.id,
-                        first: 100,
-                        after: page1.data.pagination.cursor
-                    }
-                });
-                streams.push(...page2.data.data);
+        let cursor;
+        const maxPages = 700;
+        for (let page = 0; page < maxPages; page++) {
+            const params = {
+                first: 100
+            };
+            if (cursor) {
+                params.after = cursor;
+            }
+            const response = await this.get(Twitch_1.default.StreamsUrl, params);
+            streams.push(...response.data);
+            cursor =
+                response.pagination?.cursor;
+            console.log(`Stream cache page ${page + 1}/${maxPages} - ${streams.length} streams`);
+            if (!cursor ||
+                response.data.length === 0) {
+                break;
             }
         }
         return streams;
     }
     async getTopGameStreams() {
-        await this.authenticate();
-        const headers = {
-            Authorization: `Bearer ${this.accessToken}`,
-            "Client-Id": Twitch_1.default.ClientId
-        };
-        const gamesResponse = await axios_1.default.get(Twitch_1.default.GamesUrl, {
-            headers,
-            params: {
-                first: 5
-            }
+        const gamesResponse = await this.get(Twitch_1.default.GamesUrl, {
+            first: 5
         });
-        const games = gamesResponse.data.data;
+        const games = gamesResponse.data;
         const streams = [];
         for (const game of games) {
-            const page1 = await axios_1.default.get(Twitch_1.default.StreamsUrl, {
-                headers,
-                params: {
+            let cursor;
+            for (let page = 0; page < 2; page++) {
+                const params = {
                     game_id: game.id,
                     first: 100
+                };
+                if (cursor) {
+                    params.after = cursor;
                 }
-            });
-            streams.push(...page1.data.data.filter(stream => stream.viewer_count >= 5 &&
-                stream.viewer_count <= 200));
-            if (page1.data.pagination?.cursor) {
-                const page2 = await axios_1.default.get(Twitch_1.default.StreamsUrl, {
-                    headers,
-                    params: {
-                        game_id: game.id,
-                        first: 100,
-                        after: page1.data.pagination.cursor
-                    }
-                });
-                streams.push(...page2.data.data.filter(stream => stream.viewer_count >= 5 &&
+                const response = await this.get(Twitch_1.default.StreamsUrl, params);
+                streams.push(...response.data.filter(stream => stream.viewer_count >= 5 &&
                     stream.viewer_count <= 200));
+                cursor =
+                    response.pagination?.cursor;
+                if (!cursor ||
+                    response.data.length === 0) {
+                    break;
+                }
             }
         }
         streams.sort(() => Math.random() - 0.5);
