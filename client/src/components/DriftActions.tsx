@@ -111,6 +111,7 @@ export default function DriftActions({
                 </div>
 
                 <button
+type="button"
                     className="drift-button"
                     onClick={onNext}
                 >

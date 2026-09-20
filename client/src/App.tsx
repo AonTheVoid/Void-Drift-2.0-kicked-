@@ -112,13 +112,9 @@ export default function App() {
         setGameResults([]);
     }
 
-    if (loading) {
-        return <div className="loading">Loading...</div>;
-    }
-
     if (!stream) {
-        return <div className="loading">Unable to load creator.</div>;
-    }
+    return <div className="loading">Loading...</div>;
+}
 
     return (
         <div className="app">
