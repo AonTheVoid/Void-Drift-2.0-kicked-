@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import DriftPlayer from "./components/DriftPlayer";
-import DriftInfo from "./components/DriftInfo";
 import DriftActions from "./components/DriftActions";
 
 import {
@@ -17,6 +16,15 @@ import type {
 } from "./services/Api";
 
 import "./styles/app.css";
+
+interface FeaturedCreator {
+    platform: Platform;
+    channelLogin: string;
+    channelName: string;
+    profileImageUrl: string;
+    url: string;
+    updatedAt: string;
+}
 
 export default function App() {
 
@@ -56,8 +64,9 @@ export default function App() {
                     "void-language"
                 );
 
-            if (saved)
+            if (saved) {
                 return saved;
+            }
 
             const browser =
                 navigator.language.toLowerCase();
@@ -102,6 +111,12 @@ export default function App() {
     const [searchingGames, setSearchingGames] =
         useState(false);
 
+    const [featured, setFeatured] =
+        useState<FeaturedCreator | null>(null);
+
+    const [featuredLoading, setFeaturedLoading] =
+        useState(true);
+
     useEffect(() => {
 
         localStorage.setItem(
@@ -119,6 +134,49 @@ export default function App() {
         );
 
     }, [language]);
+
+    useEffect(() => {
+
+        async function LoadFeatured() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/featured"
+                    );
+
+                if (!response.ok) {
+                    throw new Error(
+                        "No featured creator."
+                    );
+                }
+
+                const data =
+                    await response.json();
+
+                setFeatured(data);
+
+            } catch (error) {
+
+                console.error(
+                    "Unable to load featured creator.",
+                    error
+                );
+
+                setFeatured(null);
+
+            } finally {
+
+                setFeaturedLoading(false);
+
+            }
+
+        }
+
+        void LoadFeatured();
+
+    }, []);
 
     async function LoadRandom() {
 
@@ -143,10 +201,6 @@ export default function App() {
                 error
             );
 
-            /*
-             * Keep the current stream visible if
-             * the new request fails.
-             */
             if (!stream) {
                 setStream(null);
             }
@@ -271,13 +325,6 @@ export default function App() {
 
     }
 
-    /*
-     * Initial load only.
-     *
-     * Once a stream exists, we NEVER replace it
-     * with a loading screen while another stream
-     * is being requested.
-     */
     if (!stream && loading) {
 
         return (
@@ -298,166 +345,15 @@ export default function App() {
 
                 <div className="background-overlay" />
 
-            </div>
-        );
-
-    }
-
-    /*
-     * A request finished and there is genuinely
-     * no stream available for the current filter.
-     */
-    if (!stream && !loading) {
-
-        return (
-            <div className="app empty-state">
-
-                <video
-                    className="background-video"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                >
-                    <source
-                        src="/background.mp4"
-                        type="video/mp4"
-                    />
-                </video>
-
-                <div className="background-overlay" />
-
-                <header className="app-header">
-
+                <div className="loading-mark">
                     <img
                         src="/logo.png"
                         alt="Void Drift"
-                        className="app-logo"
                     />
 
-                    <p className="app-tagline">
-                        Drift until you find someone worth
-                        sitting in the void with.
-                    </p>
-
-                    <select
-                        className="language-select"
-                        value={language}
-                        onChange={(e) =>
-                            setLanguage(
-                                e.target.value
-                            )
-                        }
-                    >
-                        <option value="any">
-                            {"\u{1F310}"} Any Language
-                        </option>
-
-                        <option value="en">
-                            {"\u{1F1FA}\u{1F1F8}"} English
-                        </option>
-
-                        <option value="es">
-                            {"\u{1F1EA}\u{1F1F8}"} Spanish
-                        </option>
-
-                        <option value="fr">
-                            {"\u{1F1EB}\u{1F1F7}"} French
-                        </option>
-
-                        <option value="de">
-                            {"\u{1F1E9}\u{1F1EA}"} German
-                        </option>
-
-                        <option value="pt">
-                            {"\u{1F1F5}\u{1F1F9}"} Portuguese
-                        </option>
-
-                        <option value="ja">
-                            {"\u{1F1EF}\u{1F1F5}"} Japanese
-                        </option>
-
-                        <option value="ko">
-                            {"\u{1F1F0}\u{1F1F7}"} Korean
-                        </option>
-
-                        <option value="ru">
-                            {"\u{1F1F7}\u{1F1FA}"} Russian
-                        </option>
-
-                    </select>
-
-                    <div className="platform-selector">
-
-                        <button
-                            type="button"
-                            className={
-                                `platform-button ${
-                                    platform === "twitch"
-                                        ? "active"
-                                        : ""
-                                }`
-                            }
-                            onClick={() =>
-                                SelectPlatform(
-                                    "twitch"
-                                )
-                            }
-                        >
-                            Twitch
-                        </button>
-
-                        <button
-                            type="button"
-                            className={
-                                `platform-button ${
-                                    platform === "kick"
-                                        ? "active"
-                                        : ""
-                                }`
-                            }
-                            onClick={() =>
-                                SelectPlatform(
-                                    "kick"
-                                )
-                            }
-                        >
-                            Kick
-                        </button>
-
-                    </div>
-
-                </header>
-
-                <div className="no-streams">
-
-                    <div className="no-streams-icon">
-                        {"\u2205"}
-                    </div>
-
-                    <h2>
-                        Nothing is drifting here.
-                    </h2>
-
-                    <p>
-                        No live creators were found for
-                        {selectedGame
-                            ? ` ${selectedGame.name}`
-                            : " this filter"}.
-                    </p>
-
-                    {selectedGame && (
-
-                        <button
-                            type="button"
-                            className="drift-button"
-                            onClick={ClearGame}
-                        >
-                            CLEAR GAME
-                        </button>
-
-                    )}
-
+                    <span>
+                        ENTERING THE VOID
+                    </span>
                 </div>
 
             </div>
@@ -493,128 +389,189 @@ export default function App() {
                 />
 
                 <p className="app-tagline">
-                    Drift until you find someone worth
-                    sitting in the void with.
+                    DRIFT UNTIL YOU FIND SOMEONE
+                    WORTH SITTING IN THE VOID WITH.
                 </p>
-
-                <select
-                    className="language-select"
-                    value={language}
-                    onChange={(e) =>
-                        setLanguage(
-                            e.target.value
-                        )
-                    }
-                >
-                    <option value="any">
-                        {"\u{1F310}"} Any Language
-                    </option>
-
-                    <option value="en">
-                        {"\u{1F1FA}\u{1F1F8}"} English
-                    </option>
-
-                    <option value="es">
-                        {"\u{1F1EA}\u{1F1F8}"} Spanish
-                    </option>
-
-                    <option value="fr">
-                        {"\u{1F1EB}\u{1F1F7}"} French
-                    </option>
-
-                    <option value="de">
-                        {"\u{1F1E9}\u{1F1EA}"} German
-                    </option>
-
-                    <option value="pt">
-                        {"\u{1F1F5}\u{1F1F9}"} Portuguese
-                    </option>
-
-                    <option value="ja">
-                        {"\u{1F1EF}\u{1F1F5}"} Japanese
-                    </option>
-
-                    <option value="ko">
-                        {"\u{1F1F0}\u{1F1F7}"} Korean
-                    </option>
-
-                    <option value="ru">
-                        {"\u{1F1F7}\u{1F1FA}"} Russian
-                    </option>
-
-                </select>
-
-                <div className="platform-selector">
-
-                    <button
-                        type="button"
-                        className={
-                            `platform-button ${
-                                platform === "twitch"
-                                    ? "active"
-                                    : ""
-                            }`
-                        }
-                        onClick={() =>
-                            SelectPlatform(
-                                "twitch"
-                            )
-                        }
-                    >
-                        Twitch
-                    </button>
-
-                    <button
-                        type="button"
-                        className={
-                            `platform-button ${
-                                platform === "kick"
-                                    ? "active"
-                                    : ""
-                            }`
-                        }
-                        onClick={() =>
-                            SelectPlatform(
-                                "kick"
-                            )
-                        }
-                    >
-                        Kick
-                    </button>
-
-                </div>
 
             </header>
 
-            <DriftPlayer
-                stream={stream}
-            />
+            <main className="drift-layout">
 
-            <DriftInfo
-                stream={stream}
-            />
+                <aside className="side-rail featured-rail">
 
-            <DriftActions
-                platform={platform}
-                url={stream.url}
-                mode={mode}
-                onModeChange={setMode}
-                onNext={LoadRandom}
-                gameQuery={gameQuery}
-                onGameQueryChange={
-                    setGameQuery
-                }
-                gameResults={gameResults}
-                selectedGame={selectedGame}
-                onGameSelect={SelectGame}
-                onGameClear={ClearGame}
-                searchingGames={
-                    searchingGames
-                }
-            />
+                    <div className="rail-label">
+                        FEATURED THIS WEEK
+                    </div>
+
+                    <div className="rail-rule" />
+
+                    {featuredLoading ? (
+
+                        <div className="featured-loading">
+                            LOADING
+                        </div>
+
+                    ) : featured ? (
+
+                        <div className="featured-card">
+
+                            <div className="featured-image-wrap">
+
+                                <img
+                                    src={
+                                        featured.profileImageUrl
+                                    }
+                                    alt={
+                                        featured.channelName
+                                    }
+                                    className="featured-image"
+                                />
+
+                                <div className="featured-image-glow" />
+
+                            </div>
+
+                            <div className="featured-platform">
+                                {featured.platform === "twitch"
+                                    ? "TWITCH"
+                                    : "KICK"}
+                            </div>
+
+                            <h2 className="featured-name">
+                                {featured.channelName}
+                            </h2>
+
+                            <a
+                                className={
+                                    `featured-button ${featured.platform}`
+                                }
+                                href={
+                                    featured.url
+                                }
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                WATCH ON{" "}
+                                {featured.platform === "twitch"
+                                    ? "TWITCH"
+                                    : "KICK"}
+                                <span>
+                                    {"\u2197"}
+                                </span>
+                            </a>
+
+                        </div>
+
+                    ) : (
+
+                        <div className="featured-empty">
+
+                            <span>
+                                {"\u2205"}
+                            </span>
+
+                            <p>
+                                NO FEATURED CREATOR
+                            </p>
+
+                        </div>
+
+                    )}
+
+                </aside>
+
+                <section className="player-stage">
+
+                    {stream ? (
+
+                        <DriftPlayer
+                            stream={stream}
+                        />
+
+                    ) : (
+
+                        <div className="player-empty">
+
+                            <span>
+                                {"\u2205"}
+                            </span>
+
+                            <p>
+                                NOTHING IS DRIFTING HERE.
+                            </p>
+
+                            {selectedGame && (
+
+                                <button
+                                    type="button"
+                                    onClick={ClearGame}
+                                >
+                                    CLEAR GAME
+                                </button>
+
+                            )}
+
+                        </div>
+
+                    )}
+
+                    {loading && stream && (
+                        <div className="stream-loading">
+                            <span />
+                            DRIFTING
+                        </div>
+                    )}
+
+                </section>
+
+                <aside className="side-rail controls-rail">
+
+                    <DriftActions
+                        platform={platform}
+                        onPlatformChange={
+                            SelectPlatform
+                        }
+                        language={language}
+                        onLanguageChange={
+                            setLanguage
+                        }
+                        mode={mode}
+                        onModeChange={
+                            setMode
+                        }
+                        onNext={
+                            LoadRandom
+                        }
+                        gameQuery={
+                            gameQuery
+                        }
+                        onGameQueryChange={
+                            setGameQuery
+                        }
+                        gameResults={
+                            gameResults
+                        }
+                        selectedGame={
+                            selectedGame
+                        }
+                        onGameSelect={
+                            SelectGame
+                        }
+                        onGameClear={
+                            ClearGame
+                        }
+                        searchingGames={
+                            searchingGames
+                        }
+                        url={
+                            stream?.url ?? "#"
+                        }
+                    />
+
+                </aside>
+
+            </main>
 
         </div>
-
     );
-
 }
