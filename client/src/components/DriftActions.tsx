@@ -5,24 +5,22 @@
 } from "../services/Api";
 
 interface Props {
-    platform: Platform;
-    onPlatformChange: (
-        platform: Platform
-    ) => void;
 
-    language: string;
-    onLanguageChange: (
-        language: string
-    ) => void;
+    platform: Platform;
+
+    url: string;
 
     mode: DiscoveryMode;
+
     onModeChange: (
         mode: DiscoveryMode
     ) => void;
 
-    onNext: () => void | Promise<void>;
+    onNext: () =>
+        void | Promise<void>;
 
     gameQuery: string;
+
     onGameQueryChange: (
         query: string
     ) => void;
@@ -40,14 +38,11 @@ interface Props {
 
     searchingGames: boolean;
 
-    url: string;
 }
 
 export default function DriftActions({
     platform,
-    onPlatformChange,
-    language,
-    onLanguageChange,
+    url,
     mode,
     onModeChange,
     onNext,
@@ -57,126 +52,21 @@ export default function DriftActions({
     selectedGame,
     onGameSelect,
     onGameClear,
-    searchingGames,
-    url
+    searchingGames
 }: Props) {
+
+    const platformName =
+        platform === "twitch"
+            ? "Twitch"
+            : "Kick";
 
     return (
 
-        <div className="control-panel">
+        <div className="discover-controls">
 
-            <div className="rail-label">
-                DISCOVER
-            </div>
+            <div className="control-group">
 
-            <div className="rail-rule" />
-
-            <div className="control-section">
-
-                <label className="control-label">
-                    LANGUAGE
-                </label>
-
-                <select
-                    className="control-select"
-                    value={language}
-                    onChange={(e) =>
-                        onLanguageChange(
-                            e.target.value
-                        )
-                    }
-                >
-                    <option value="any">
-                        {"\u{1F310}"} Any Language
-                    </option>
-
-                    <option value="en">
-                        {"\u{1F1FA}\u{1F1F8}"} English
-                    </option>
-
-                    <option value="es">
-                        {"\u{1F1EA}\u{1F1F8}"} Spanish
-                    </option>
-
-                    <option value="fr">
-                        {"\u{1F1EB}\u{1F1F7}"} French
-                    </option>
-
-                    <option value="de">
-                        {"\u{1F1E9}\u{1F1EA}"} German
-                    </option>
-
-                    <option value="pt">
-                        {"\u{1F1F5}\u{1F1F9}"} Portuguese
-                    </option>
-
-                    <option value="ja">
-                        {"\u{1F1EF}\u{1F1F5}"} Japanese
-                    </option>
-
-                    <option value="ko">
-                        {"\u{1F1F0}\u{1F1F7}"} Korean
-                    </option>
-
-                    <option value="ru">
-                        {"\u{1F1F7}\u{1F1FA}"} Russian
-                    </option>
-
-                </select>
-
-            </div>
-
-            <div className="control-section">
-
-                <label className="control-label">
-                    PLATFORM
-                </label>
-
-                <div className="platform-selector">
-
-                    <button
-                        type="button"
-                        className={
-                            `platform-button ${
-                                platform === "twitch"
-                                    ? "active"
-                                    : ""
-                            }`
-                        }
-                        onClick={() =>
-                            onPlatformChange(
-                                "twitch"
-                            )
-                        }
-                    >
-                        TWITCH
-                    </button>
-
-                    <button
-                        type="button"
-                        className={
-                            `platform-button ${
-                                platform === "kick"
-                                    ? "active"
-                                    : ""
-                            }`
-                        }
-                        onClick={() =>
-                            onPlatformChange(
-                                "kick"
-                            )
-                        }
-                    >
-                        KICK
-                    </button>
-
-                </div>
-
-            </div>
-
-            <div className="control-section">
-
-                <label className="control-label">
+                <label>
                     DISCOVERY MODE
                 </label>
 
@@ -189,71 +79,70 @@ export default function DriftActions({
                         )
                     }
                 >
+
                     <option value="random">
-                        {"\u{1F30D}"} Random
+                        Random
                     </option>
 
                     <option value="just-starting">
-                        {"\u26A1"} Just Starting
+                        Just Starting
                     </option>
 
                     <option value="less-than-10">
-                        {"\u{1F465}"} Less Than 10 Viewers
+                        Less Than 10 Viewers
                     </option>
 
                     <option value="partner-push">
-                        {"\u{1F3C6}"} Partner Push
+                        Partner Push
                     </option>
 
                     <option value="top-game">
-                        {"\u{1F3AF}"} Top Games
+                        Top Games
                     </option>
 
                     <option value="on-the-rise">
-                        {"\u{1F4C8}"} On the Rise
+                        On the Rise
                     </option>
 
                 </select>
 
             </div>
 
-            <div className="control-section">
+            <div className="control-group">
 
-                <label className="control-label">
+                <label>
                     GAME
                 </label>
 
-                {selectedGame ? (
+                <div className="game-search">
 
-                    <div className="selected-game">
+                    {selectedGame ? (
 
-                        <img
-                            src={
-                                selectedGame.boxArtUrl
-                            }
-                            alt=""
-                        />
+                        <div className="selected-game">
 
-                        <span>
-                            {selectedGame.name}
-                        </span>
+                            <img
+                                src={
+                                    selectedGame.boxArtUrl
+                                }
+                                alt=""
+                            />
 
-                        <button
-                            type="button"
-                            className="clear-game"
-                            onClick={
-                                onGameClear
-                            }
-                            aria-label="Clear selected game"
-                        >
-                            ×
-                        </button>
+                            <span>
+                                {selectedGame.name}
+                            </span>
 
-                    </div>
+                            <button
+                                type="button"
+                                className="clear-game"
+                                onClick={onGameClear}
+                                aria-label="Clear selected game"
+                            >
+                                ×
+                            </button>
 
-                ) : (
+                        </div>
 
-                    <div className="game-search">
+                    ) : (
 
                         <input
                             className="game-search-input"
@@ -267,14 +156,19 @@ export default function DriftActions({
                             }
                         />
 
-                        {searchingGames && (
-                            <div className="game-search-status">
-                                SEARCHING...
-                            </div>
-                        )}
+                    )}
 
-                        {!searchingGames &&
-                            gameResults.length > 0 && (
+                    {searchingGames && (
+
+                        <div className="game-search-status">
+                            SEARCHING...
+                        </div>
+
+                    )}
+
+                    {!searchingGames &&
+                        !selectedGame &&
+                        gameResults.length > 0 && (
 
                             <div className="game-results">
 
@@ -291,6 +185,7 @@ export default function DriftActions({
                                                 )
                                             }
                                         >
+
                                             <img
                                                 src={
                                                     game.boxArtUrl
@@ -311,50 +206,37 @@ export default function DriftActions({
 
                         )}
 
-                    </div>
-
-                )}
+                </div>
 
             </div>
-
-            <div className="control-divider" />
 
             <button
                 type="button"
                 className="drift-button"
                 onClick={onNext}
             >
-                <span>
-                    DRIFT
-                </span>
-
-                <span className="drift-arrow">
-                    {"\u2192"}
-                </span>
+                DRIFT
+                <span>→</span>
             </button>
 
             {url !== "#" && (
 
                 <a
                     className={
-                        `watch-current ${platform}`
+                        `platform-link ${platform}`
                     }
                     href={url}
                     target="_blank"
                     rel="noreferrer"
                 >
-                    WATCH ON{" "}
-                    {platform === "twitch"
-                        ? "TWITCH"
-                        : "KICK"}
-
-                    <span>
-                        {"\u2197"}
-                    </span>
+                    WATCH ON {platformName}
+                    <span>↗</span>
                 </a>
 
             )}
 
         </div>
+
     );
+
 }

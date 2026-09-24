@@ -71,29 +71,14 @@ export default function App() {
             const browser =
                 navigator.language.toLowerCase();
 
-            if (browser.startsWith("en"))
-                return "en";
-
-            if (browser.startsWith("es"))
-                return "es";
-
-            if (browser.startsWith("fr"))
-                return "fr";
-
-            if (browser.startsWith("de"))
-                return "de";
-
-            if (browser.startsWith("pt"))
-                return "pt";
-
-            if (browser.startsWith("ja"))
-                return "ja";
-
-            if (browser.startsWith("ko"))
-                return "ko";
-
-            if (browser.startsWith("ru"))
-                return "ru";
+            if (browser.startsWith("en")) return "en";
+            if (browser.startsWith("es")) return "es";
+            if (browser.startsWith("fr")) return "fr";
+            if (browser.startsWith("de")) return "de";
+            if (browser.startsWith("pt")) return "pt";
+            if (browser.startsWith("ja")) return "ja";
+            if (browser.startsWith("ko")) return "ko";
+            if (browser.startsWith("ru")) return "ru";
 
             return "any";
 
@@ -142,20 +127,17 @@ export default function App() {
             try {
 
                 const response =
-                    await fetch(
-                        "/api/featured"
-                    );
+                    await fetch("/api/featured");
 
                 if (!response.ok) {
-                    throw new Error(
-                        "No featured creator."
-                    );
+                    setFeatured(null);
+                    return;
                 }
 
-                const data =
+                const creator =
                     await response.json();
 
-                setFeatured(data);
+                setFeatured(creator);
 
             } catch (error) {
 
@@ -200,10 +182,6 @@ export default function App() {
                 "Unable to load creator.",
                 error
             );
-
-            if (!stream) {
-                setStream(null);
-            }
 
         } finally {
 
@@ -252,9 +230,7 @@ export default function App() {
                                 query
                             );
 
-                        setGameResults(
-                            results
-                        );
+                        setGameResults(results);
 
                     } catch (error) {
 
@@ -267,9 +243,7 @@ export default function App() {
 
                     } finally {
 
-                        setSearchingGames(
-                            false
-                        );
+                        setSearchingGames(false);
 
                     }
 
@@ -278,9 +252,7 @@ export default function App() {
             );
 
         return () =>
-            window.clearTimeout(
-                timeout
-            );
+            window.clearTimeout(timeout);
 
     }, [
         platform,
@@ -297,9 +269,7 @@ export default function App() {
             return;
         }
 
-        setPlatform(
-            nextPlatform
-        );
+        setPlatform(nextPlatform);
 
         setSelectedGame(null);
         setGameQuery("");
@@ -325,6 +295,18 @@ export default function App() {
 
     }
 
+    const languageOptions = [
+        ["any", "Any Language"],
+        ["en", "English"],
+        ["es", "Spanish"],
+        ["fr", "French"],
+        ["de", "German"],
+        ["pt", "Portuguese"],
+        ["ja", "Japanese"],
+        ["ko", "Korean"],
+        ["ru", "Russian"]
+    ];
+
     if (!stream && loading) {
 
         return (
@@ -346,14 +328,7 @@ export default function App() {
                 <div className="background-overlay" />
 
                 <div className="loading-mark">
-                    <img
-                        src="/logo.png"
-                        alt="Void Drift"
-                    />
-
-                    <span>
-                        ENTERING THE VOID
-                    </span>
+                    DRIFT
                 </div>
 
             </div>
@@ -389,21 +364,23 @@ export default function App() {
                 />
 
                 <p className="app-tagline">
-                    DRIFT UNTIL YOU FIND SOMEONE
-                    WORTH SITTING IN THE VOID WITH.
+                    Drift until you find someone worth
+                    sitting in the void with.
                 </p>
 
             </header>
 
             <main className="drift-layout">
 
+                {/* =========================
+                    LEFT — FEATURED
+                ========================== */}
+
                 <aside className="side-rail featured-rail">
 
                     <div className="rail-label">
                         FEATURED THIS WEEK
                     </div>
-
-                    <div className="rail-rule" />
 
                     {featuredLoading ? (
 
@@ -427,37 +404,38 @@ export default function App() {
                                     className="featured-image"
                                 />
 
-                                <div className="featured-image-glow" />
-
                             </div>
 
                             <div className="featured-platform">
+
                                 {featured.platform === "twitch"
                                     ? "TWITCH"
                                     : "KICK"}
+
                             </div>
 
-                            <h2 className="featured-name">
+                            <div className="featured-name">
+
                                 {featured.channelName}
-                            </h2>
+
+                            </div>
 
                             <a
+                                href={featured.url}
+                                target="_blank"
+                                rel="noreferrer"
                                 className={
                                     `featured-button ${featured.platform}`
                                 }
-                                href={
-                                    featured.url
-                                }
-                                target="_blank"
-                                rel="noreferrer"
                             >
+
                                 WATCH ON{" "}
                                 {featured.platform === "twitch"
                                     ? "TWITCH"
                                     : "KICK"}
-                                <span>
-                                    {"\u2197"}
-                                </span>
+
+                                <span>↗</span>
+
                             </a>
 
                         </div>
@@ -466,13 +444,7 @@ export default function App() {
 
                         <div className="featured-empty">
 
-                            <span>
-                                {"\u2205"}
-                            </span>
-
-                            <p>
-                                NO FEATURED CREATOR
-                            </p>
+                            NO FEATURED CREATOR
 
                         </div>
 
@@ -480,92 +452,155 @@ export default function App() {
 
                 </aside>
 
+                {/* =========================
+                    CENTER — PLAYER
+                ========================== */}
+
                 <section className="player-stage">
 
-                    {stream ? (
+                    <div className="player-frame">
 
-                        <DriftPlayer
-                            stream={stream}
-                        />
+                        {stream ? (
 
-                    ) : (
+                            <DriftPlayer
+                                stream={stream}
+                            />
 
-                        <div className="player-empty">
+                        ) : (
 
-                            <span>
-                                {"\u2205"}
-                            </span>
+                            <div className="player-empty">
 
-                            <p>
-                                NOTHING IS DRIFTING HERE.
-                            </p>
+                                <div>
+                                    NOTHING IS DRIFTING HERE.
+                                </div>
 
-                            {selectedGame && (
+                                <span>
+                                    Try another platform,
+                                    language, or game.
+                                </span>
 
-                                <button
-                                    type="button"
-                                    onClick={ClearGame}
-                                >
-                                    CLEAR GAME
-                                </button>
+                            </div>
 
-                            )}
+                        )}
 
-                        </div>
+                        {loading && stream && (
 
-                    )}
+                            <div className="player-loading">
+                                DRIFTING...
+                            </div>
 
-                    {loading && stream && (
-                        <div className="stream-loading">
-                            <span />
-                            DRIFTING
-                        </div>
-                    )}
+                        )}
+
+                    </div>
 
                 </section>
 
+                {/* =========================
+                    RIGHT — CONTROLS
+                ========================== */}
+
                 <aside className="side-rail controls-rail">
+
+                    <div className="rail-label">
+                        DISCOVER
+                    </div>
+
+                    <div className="control-group">
+
+                        <label>
+                            LANGUAGE
+                        </label>
+
+                        <select
+                            className="control-select"
+                            value={language}
+                            onChange={(e) =>
+                                setLanguage(
+                                    e.target.value
+                                )
+                            }
+                        >
+
+                            {languageOptions.map(
+                                ([value, label]) => (
+
+                                    <option
+                                        key={value}
+                                        value={value}
+                                    >
+                                        {label}
+                                    </option>
+
+                                )
+                            )}
+
+                        </select>
+
+                    </div>
+
+                    <div className="control-group">
+
+                        <label>
+                            PLATFORM
+                        </label>
+
+                        <div className="platform-selector">
+
+                            <button
+                                type="button"
+                                className={
+                                    `platform-button ${
+                                        platform === "twitch"
+                                            ? "active"
+                                            : ""
+                                    }`
+                                }
+                                onClick={() =>
+                                    SelectPlatform(
+                                        "twitch"
+                                    )
+                                }
+                            >
+                                TWITCH
+                            </button>
+
+                            <button
+                                type="button"
+                                className={
+                                    `platform-button ${
+                                        platform === "kick"
+                                            ? "active"
+                                            : ""
+                                    }`
+                                }
+                                onClick={() =>
+                                    SelectPlatform(
+                                        "kick"
+                                    )
+                                }
+                            >
+                                KICK
+                            </button>
+
+                        </div>
+
+                    </div>
 
                     <DriftActions
                         platform={platform}
-                        onPlatformChange={
-                            SelectPlatform
-                        }
-                        language={language}
-                        onLanguageChange={
-                            setLanguage
-                        }
+                        url={stream?.url ?? "#"}
                         mode={mode}
-                        onModeChange={
-                            setMode
-                        }
-                        onNext={
-                            LoadRandom
-                        }
-                        gameQuery={
-                            gameQuery
-                        }
+                        onModeChange={setMode}
+                        onNext={LoadRandom}
+                        gameQuery={gameQuery}
                         onGameQueryChange={
                             setGameQuery
                         }
-                        gameResults={
-                            gameResults
-                        }
-                        selectedGame={
-                            selectedGame
-                        }
-                        onGameSelect={
-                            SelectGame
-                        }
-                        onGameClear={
-                            ClearGame
-                        }
-                        searchingGames={
-                            searchingGames
-                        }
-                        url={
-                            stream?.url ?? "#"
-                        }
+                        gameResults={gameResults}
+                        selectedGame={selectedGame}
+                        onGameSelect={SelectGame}
+                        onGameClear={ClearGame}
+                        searchingGames={searchingGames}
                     />
 
                 </aside>
@@ -573,5 +608,7 @@ export default function App() {
             </main>
 
         </div>
+
     );
+
 }
