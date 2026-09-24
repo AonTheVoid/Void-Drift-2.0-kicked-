@@ -1110,10 +1110,3 @@ a {
         padding: 18px 16px;
     }
 }
-'@
-
-[System.IO.File]::WriteAllText(
-    (Resolve-Path ".\src\styles\app.css"),
-    $css,
-    [System.Text.UTF8Encoding]::new($false)
-)
