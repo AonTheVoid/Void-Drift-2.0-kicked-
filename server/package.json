@@ -8,11 +8,13 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "featured": "node dist/scripts/SetFeatured.js"
   },
   "keywords": [
     "void-drift",
-    "twitch"
+    "twitch",
+    "kick"
   ],
   "author": "",
   "license": "MIT",

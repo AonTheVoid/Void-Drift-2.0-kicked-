@@ -5,6 +5,7 @@ import express from "express";
 import PlatformCacheService from "./services/PlatformCacheService";
 import RandomRoute from "./routes/RandomRoute";
 import SearchGamesRoute from "./routes/SearchGamesRoute";
+import FeaturedRoute from "./routes/FeaturedRoute";
 import TwitchConfig from "./config/Twitch";
 
 dotenv.config();
@@ -36,20 +37,29 @@ app.use(
     SearchGamesRoute
 );
 
+app.use(
+    "/api/featured",
+    FeaturedRoute
+);
+
 async function refreshCaches(): Promise<void> {
 
     console.log("");
+
     console.log(
         "Refreshing platform stream caches..."
     );
 
-    const startedAt = Date.now();
+    const startedAt =
+        Date.now();
 
     await PlatformCacheService.refreshAll();
 
     const elapsed =
-        ((Date.now() - startedAt) / 1000)
-            .toFixed(1);
+        (
+            (Date.now() - startedAt) /
+            1000
+        ).toFixed(1);
 
     console.log(
         `Platform cache refresh completed in ${elapsed}s.`
@@ -61,30 +71,39 @@ async function start(): Promise<void> {
 
     await refreshCaches();
 
-    app.listen(PORT, () => {
+    app.listen(
+        PORT,
+        () => {
 
-        console.log("");
-        console.log(
-            "====================================="
-        );
-        console.log(
-            "        Void Drift Server"
-        );
-        console.log(
-            "====================================="
-        );
-        console.log(
-            `Listening : http://localhost:${PORT}`
-        );
-        console.log("");
+            console.log("");
 
-    });
+            console.log(
+                "====================================="
+            );
+
+            console.log(
+                "        Void Drift Server"
+            );
+
+            console.log(
+                "====================================="
+            );
+
+            console.log(
+                `Listening : http://localhost:${PORT}`
+            );
+
+            console.log("");
+
+        }
+    );
 
     const refreshLoop =
         async (): Promise<void> => {
 
             const refreshInterval =
-                TwitchConfig.CacheRefreshSeconds * 1000;
+                TwitchConfig.CacheRefreshSeconds *
+                1000;
 
             const elapsed =
                 Date.now();
@@ -92,25 +111,30 @@ async function start(): Promise<void> {
             await refreshCaches();
 
             const refreshTime =
-                Date.now() - elapsed;
+                Date.now() -
+                elapsed;
 
             const remainingDelay =
                 Math.max(
                     0,
-                    refreshInterval - refreshTime
+                    refreshInterval -
+                    refreshTime
                 );
 
-            if (remainingDelay > 0) {
+            if (
+                remainingDelay > 0
+            ) {
 
                 console.log(
                     `Next platform cache refresh in ${(remainingDelay / 1000).toFixed(1)}s.`
                 );
 
-                await new Promise(resolve =>
-                    setTimeout(
-                        resolve,
-                        remainingDelay
-                    )
+                await new Promise(
+                    resolve =>
+                        setTimeout(
+                            resolve,
+                            remainingDelay
+                        )
                 );
 
             } else {
@@ -130,4 +154,3 @@ async function start(): Promise<void> {
 }
 
 void start();
-

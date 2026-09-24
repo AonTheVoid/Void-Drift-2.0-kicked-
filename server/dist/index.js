@@ -9,6 +9,7 @@ const express_1 = __importDefault(require("express"));
 const PlatformCacheService_1 = __importDefault(require("./services/PlatformCacheService"));
 const RandomRoute_1 = __importDefault(require("./routes/RandomRoute"));
 const SearchGamesRoute_1 = __importDefault(require("./routes/SearchGamesRoute"));
+const FeaturedRoute_1 = __importDefault(require("./routes/FeaturedRoute"));
 const Twitch_1 = __importDefault(require("./config/Twitch"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -22,13 +23,14 @@ app.get("/api/health", (_req, res) => {
 });
 app.use("/api/random", RandomRoute_1.default);
 app.use("/api/search-games", SearchGamesRoute_1.default);
+app.use("/api/featured", FeaturedRoute_1.default);
 async function refreshCaches() {
     console.log("");
     console.log("Refreshing platform stream caches...");
     const startedAt = Date.now();
     await PlatformCacheService_1.default.refreshAll();
-    const elapsed = ((Date.now() - startedAt) / 1000)
-        .toFixed(1);
+    const elapsed = ((Date.now() - startedAt) /
+        1000).toFixed(1);
     console.log(`Platform cache refresh completed in ${elapsed}s.`);
 }
 async function start() {
@@ -42,11 +44,14 @@ async function start() {
         console.log("");
     });
     const refreshLoop = async () => {
-        const refreshInterval = Twitch_1.default.CacheRefreshSeconds * 1000;
+        const refreshInterval = Twitch_1.default.CacheRefreshSeconds *
+            1000;
         const elapsed = Date.now();
         await refreshCaches();
-        const refreshTime = Date.now() - elapsed;
-        const remainingDelay = Math.max(0, refreshInterval - refreshTime);
+        const refreshTime = Date.now() -
+            elapsed;
+        const remainingDelay = Math.max(0, refreshInterval -
+            refreshTime);
         if (remainingDelay > 0) {
             console.log(`Next platform cache refresh in ${(remainingDelay / 1000).toFixed(1)}s.`);
             await new Promise(resolve => setTimeout(resolve, remainingDelay));
