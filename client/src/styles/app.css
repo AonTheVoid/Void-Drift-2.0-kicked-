@@ -896,53 +896,10 @@ select {
         border-radius: 10px;
     }
 
-}.app-header {
-    position: relative;
-    z-index: 5;
+}/* ==========================================
+   CENTERED HEADER
+========================================== */
 
-    width: 100%;
-    min-height: 150px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    padding: 18px 20px 0;
-
-    gap: 10px;
-}
-
-.app-logo {
-    width: 155px;
-    height: auto;
-    display: block;
-}
-
-.app-tagline {
-    margin: 0;
-
-    color: rgba(255, 255, 255, 0.48);
-
-    font-size: 12px;
-    font-weight: 500;
-
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-
-    text-align: center;
-}
-.app-header {
-    min-height: 110px;
-    padding: 8px 20px 0;
-    gap: 6px;
-}
-
-.drift-layout {
-    min-height: 0;
-    padding: 10px 0 40px;
-    align-items: center;
-}
 .app-header {
     position: relative;
     z-index: 5;
@@ -980,4 +937,160 @@ select {
     text-align: center;
 
     line-height: 1.4;
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 850px) {
+
+    .app {
+        width: 100%;
+        min-height: 100vh;
+        padding: 12px 14px 40px;
+        overflow-x: hidden;
+    }
+
+    .app-header {
+        width: 100%;
+        min-height: 120px;
+        height: auto;
+        padding: 4px 0 10px;
+        gap: 6px;
+    }
+
+    .app-logo {
+        width: 125px;
+        max-width: 45vw;
+    }
+
+    .app-tagline {
+        max-width: 300px;
+        font-size: 8px;
+        line-height: 1.4;
+        letter-spacing: 0.10em;
+        text-align: center;
+    }
+
+    .drift-layout {
+        width: 100%;
+        max-width: 600px;
+        min-height: 0;
+
+        display: grid;
+        grid-template-columns: 1fr;
+
+        gap: 16px;
+        align-items: stretch;
+
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .player-stage {
+        order: 1;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .player-frame {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 12px;
+    }
+
+    .featured-rail {
+        order: 2;
+        width: 100%;
+        min-height: 0;
+        padding: 18px;
+    }
+
+    .featured-image-wrap {
+        width: 100%;
+        max-width: 220px;
+        margin: 0 auto;
+    }
+
+    .featured-name {
+        font-size: 22px;
+    }
+
+    .controls-rail {
+        order: 3;
+        width: 100%;
+        min-height: 0;
+        padding: 18px;
+    }
+
+    .discover-controls {
+        width: 100%;
+        gap: 16px;
+    }
+
+    .control-group {
+        width: 100%;
+    }
+
+    .control-select,
+    .game-search-input,
+    .selected-game {
+        width: 100%;
+    }
+
+    .platform-selector {
+        width: 100%;
+    }
+
+    .platform-button {
+        min-height: 44px;
+    }
+
+    .drift-button {
+        width: 100%;
+        min-height: 58px;
+    }
+
+    .platform-link {
+        width: 100%;
+    }
+}
+
+
+/* ==========================================
+   SMALL PHONES
+========================================== */
+
+@media (max-width: 520px) {
+
+    .app {
+        padding: 8px 12px 32px;
+    }
+
+    .app-header {
+        min-height: 112px;
+    }
+
+    .app-logo {
+        width: 115px;
+    }
+
+    .app-tagline {
+        font-size: 7px;
+    }
+
+    .drift-layout {
+        gap: 14px;
+    }
+
+    .player-frame {
+        border-radius: 10px;
+    }
+
+    .side-rail {
+        padding: 16px;
+        border-radius: 14px;
+    }
 }
