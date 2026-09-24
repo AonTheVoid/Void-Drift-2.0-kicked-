@@ -14,11 +14,7 @@ body,
 body {
     background: #000;
     color: #fff;
-    font-family:
-        Inter,
-        Arial,
-        Helvetica,
-        sans-serif;
+    font-family: Inter, Arial, Helvetica, sans-serif;
 }
 
 button,
@@ -27,24 +23,38 @@ select {
     font: inherit;
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
 /* ==========================================
    APP
 ========================================== */
 
 .app {
     position: relative;
-    min-height: 100vh;
     width: 100%;
+    min-height: 100vh;
     overflow-x: hidden;
     background: #000;
 }
 
+
+/* ==========================================
+   BACKGROUND
+========================================== */
+
 .background-video {
     position: fixed;
     inset: 0;
+
     width: 100%;
     height: 100%;
+
     object-fit: cover;
+
     z-index: 0;
     pointer-events: none;
 }
@@ -52,17 +62,19 @@ select {
 .background-overlay {
     position: fixed;
     inset: 0;
+
     z-index: 1;
     pointer-events: none;
 
     background:
         radial-gradient(
             ellipse at center,
-            rgba(0, 0, 0, 0.18) 0%,
-            rgba(0, 0, 0, 0.55) 65%,
-            rgba(0, 0, 0, 0.82) 100%
+            rgba(0, 0, 0, 0.12) 0%,
+            rgba(0, 0, 0, 0.42) 55%,
+            rgba(0, 0, 0, 0.78) 100%
         );
 }
+
 
 /* ==========================================
    HEADER
@@ -73,100 +85,115 @@ select {
     z-index: 5;
 
     width: 100%;
-    height: 100px;
 
     display: flex;
+    flex-direction: column;
     align-items: center;
 
-    padding: 24px 42px;
+    padding: 16px 24px 12px;
+
+    gap: 7px;
 }
 
 .app-logo {
-    width: 155px;
+    width: 150px;
     height: auto;
+
     display: block;
+    flex-shrink: 0;
 }
 
 .app-tagline {
-    margin: 0 0 0 24px;
+    margin: 0;
 
     color: rgba(255, 255, 255, 0.48);
 
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
 
+    line-height: 1.4;
     letter-spacing: 0.12em;
+
+    text-align: center;
     text-transform: uppercase;
 }
 
+
 /* ==========================================
-   MAIN THREE COLUMN LAYOUT
+   MAIN DESKTOP LAYOUT
 ========================================== */
 
 .drift-layout {
     position: relative;
     z-index: 5;
 
-    width: calc(100% - 72px);
-    max-width: 1700px;
+    width: calc(100% - 64px);
+    max-width: 2200px;
 
-    min-height: calc(100vh - 100px);
+    min-height: calc(100vh - 145px);
 
     margin: 0 auto;
 
     display: grid;
 
     grid-template-columns:
-        220px
+        320px
         minmax(0, 1fr)
-        280px;
+        380px;
 
-    gap: 28px;
+    gap: 30px;
 
     align-items: center;
 
-    padding: 20px 0 40px;
+    padding: 10px 0 45px;
 }
+
 
 /* ==========================================
    SIDE RAILS
 ========================================== */
 
 .side-rail {
-    height: fit-content;
-    min-height: 420px;
+    width: 100%;
 
-    padding: 22px;
+    padding: 26px;
 
     background:
         linear-gradient(
             180deg,
-            rgba(12, 12, 12, 0.82),
-            rgba(5, 5, 5, 0.68)
+            rgba(13, 13, 13, 0.88),
+            rgba(5, 5, 5, 0.76)
         );
 
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.11);
 
-    border-radius: 18px;
+    border-radius: 20px;
 
-    backdrop-filter: blur(18px);
+    backdrop-filter: blur(20px);
 
     box-shadow:
-        0 24px 70px rgba(0, 0, 0, 0.42),
+        0 30px 90px rgba(0, 0, 0, 0.55),
         inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
+
+/* ==========================================
+   RAIL LABEL
+========================================== */
+
 .rail-label {
-    margin-bottom: 22px;
+    margin-bottom: 24px;
 
-    color: rgba(255, 255, 255, 0.52);
+    color: rgba(255, 255, 255, 0.48);
 
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 800;
 
     letter-spacing: 0.18em;
+
     text-transform: uppercase;
 }
+
 
 /* ==========================================
    FEATURED
@@ -175,6 +202,8 @@ select {
 .featured-rail {
     display: flex;
     flex-direction: column;
+
+    min-height: 500px;
 }
 
 .featured-card {
@@ -187,11 +216,11 @@ select {
 
     overflow: hidden;
 
-    border-radius: 12px;
+    border-radius: 14px;
 
     background: #080808;
 
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 .featured-image {
@@ -204,23 +233,25 @@ select {
 }
 
 .featured-platform {
-    margin-top: 14px;
+    margin-top: 17px;
 
     color: rgba(255, 255, 255, 0.42);
 
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 800;
 
     letter-spacing: 0.18em;
+
+    text-transform: uppercase;
 }
 
 .featured-name {
-    margin-top: 5px;
+    margin-top: 6px;
 
     color: #fff;
 
-    font-size: 18px;
-    font-weight: 800;
+    font-size: 24px;
+    font-weight: 850;
 
     line-height: 1.1;
 
@@ -234,17 +265,16 @@ select {
     align-items: center;
     justify-content: space-between;
 
-    margin-top: 16px;
-    padding: 12px 13px;
+    margin-top: 18px;
 
-    border-radius: 9px;
+    padding: 15px 16px;
 
-    text-decoration: none;
+    border-radius: 10px;
 
     color: #000;
     background: #fff;
 
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 900;
 
     letter-spacing: 0.08em;
@@ -268,26 +298,27 @@ select {
 }
 
 .featured-button span {
-    font-size: 13px;
+    font-size: 16px;
 }
 
 .featured-loading,
 .featured-empty {
     color: rgba(255, 255, 255, 0.35);
 
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
 
     letter-spacing: 0.12em;
 }
 
+
 /* ==========================================
-   CENTER PLAYER
+   PLAYER
 ========================================== */
 
 .player-stage {
-    min-width: 0;
     width: 100%;
+    min-width: 0;
 }
 
 .player-frame {
@@ -300,13 +331,13 @@ select {
 
     background: #000;
 
-    border-radius: 16px;
+    border-radius: 18px;
 
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.10);
 
     box-shadow:
-        0 30px 100px rgba(0, 0, 0, 0.72),
-        0 0 80px rgba(0, 0, 0, 0.40);
+        0 40px 120px rgba(0, 0, 0, 0.75),
+        0 0 100px rgba(0, 0, 0, 0.45);
 }
 
 .player-frame .drift-player {
@@ -341,13 +372,13 @@ select {
     align-items: center;
     justify-content: center;
 
-    gap: 10px;
+    gap: 12px;
 
     color: rgba(255, 255, 255, 0.60);
 
     text-align: center;
 
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 800;
 
     letter-spacing: 0.12em;
@@ -356,7 +387,7 @@ select {
 .player-empty span {
     color: rgba(255, 255, 255, 0.32);
 
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
 
     letter-spacing: 0;
@@ -368,7 +399,7 @@ select {
     top: 16px;
     right: 16px;
 
-    padding: 7px 10px;
+    padding: 8px 11px;
 
     border-radius: 6px;
 
@@ -376,7 +407,7 @@ select {
 
     color: rgba(255, 255, 255, 0.72);
 
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 800;
 
     letter-spacing: 0.14em;
@@ -384,20 +415,25 @@ select {
     pointer-events: none;
 }
 
+
 /* ==========================================
-   RIGHT CONTROLS
+   CONTROLS
 ========================================== */
 
 .controls-rail {
     display: flex;
     flex-direction: column;
+
+    min-height: 500px;
 }
 
 .discover-controls {
+    width: 100%;
+
     display: flex;
     flex-direction: column;
 
-    gap: 18px;
+    gap: 22px;
 }
 
 .control-group {
@@ -407,26 +443,33 @@ select {
 .control-group label {
     display: block;
 
-    margin-bottom: 8px;
+    margin-bottom: 9px;
 
-    color: rgba(255, 255, 255, 0.42);
+    color: rgba(255, 255, 255, 0.44);
 
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 800;
 
     letter-spacing: 0.16em;
+
+    text-transform: uppercase;
 }
+
+
+/* ==========================================
+   SELECTS / INPUTS
+========================================== */
 
 .control-select,
 .game-search-input,
 .selected-game {
     width: 100%;
 
-    min-height: 44px;
+    min-height: 50px;
 
-    border: 1px solid rgba(255, 255, 255, 0.11);
+    border: 1px solid rgba(255, 255, 255, 0.12);
 
-    border-radius: 9px;
+    border-radius: 10px;
 
     background: rgba(255, 255, 255, 0.055);
 
@@ -436,11 +479,13 @@ select {
 }
 
 .control-select {
-    padding: 0 12px;
+    padding: 0 14px;
 
     cursor: pointer;
 
     appearance: auto;
+
+    font-size: 14px;
 }
 
 .control-select:focus,
@@ -453,6 +498,7 @@ select {
     color: #fff;
 }
 
+
 /* ==========================================
    PLATFORM
 ========================================== */
@@ -463,11 +509,11 @@ select {
     display: grid;
     grid-template-columns: 1fr 1fr;
 
-    gap: 4px;
+    gap: 5px;
 
-    padding: 4px;
+    padding: 5px;
 
-    border-radius: 9px;
+    border-radius: 10px;
 
     background: rgba(255, 255, 255, 0.055);
 
@@ -475,16 +521,16 @@ select {
 }
 
 .platform-button {
-    min-height: 36px;
+    min-height: 42px;
 
     border: 0;
-    border-radius: 6px;
+    border-radius: 7px;
 
     background: transparent;
 
     color: rgba(255, 255, 255, 0.35);
 
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 900;
 
     letter-spacing: 0.08em;
@@ -505,21 +551,23 @@ select {
     color: #000;
 }
 
+
 /* ==========================================
    GAME SEARCH
 ========================================== */
 
 .game-search {
     position: relative;
+
     width: 100%;
 }
 
 .game-search-input {
-    padding: 0 12px;
+    padding: 0 14px;
 
     color: #fff;
 
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .game-search-input::placeholder {
@@ -530,14 +578,14 @@ select {
     display: flex;
     align-items: center;
 
-    gap: 9px;
+    gap: 10px;
 
-    padding: 4px 7px 4px 4px;
+    padding: 5px 8px 5px 5px;
 }
 
 .selected-game img {
-    width: 32px;
-    height: 36px;
+    width: 36px;
+    height: 40px;
 
     flex-shrink: 0;
 
@@ -554,12 +602,12 @@ select {
     white-space: nowrap;
     text-overflow: ellipsis;
 
-    font-size: 11px;
+    font-size: 13px;
 }
 
 .clear-game {
-    width: 26px;
-    height: 26px;
+    width: 30px;
+    height: 30px;
 
     border: 0;
     border-radius: 50%;
@@ -583,7 +631,7 @@ select {
     left: 0;
     right: 0;
 
-    top: calc(100% + 7px);
+    top: calc(100% + 8px);
 
     z-index: 50;
 
@@ -600,11 +648,11 @@ select {
 }
 
 .game-results {
-    max-height: 260px;
+    max-height: 300px;
 
     overflow-y: auto;
 
-    padding: 5px;
+    padding: 6px;
 }
 
 .game-result {
@@ -613,12 +661,12 @@ select {
     display: flex;
     align-items: center;
 
-    gap: 9px;
+    gap: 10px;
 
-    padding: 7px;
+    padding: 9px;
 
     border: 0;
-    border-radius: 7px;
+    border-radius: 8px;
 
     background: transparent;
 
@@ -634,8 +682,8 @@ select {
 }
 
 .game-result img {
-    width: 30px;
-    height: 40px;
+    width: 34px;
+    height: 44px;
 
     object-fit: cover;
 
@@ -650,11 +698,11 @@ select {
     white-space: nowrap;
     text-overflow: ellipsis;
 
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .game-search-status {
-    padding: 12px;
+    padding: 13px;
 
     color: rgba(255, 255, 255, 0.42);
 
@@ -663,31 +711,32 @@ select {
     letter-spacing: 0.08em;
 }
 
+
 /* ==========================================
    DRIFT BUTTON
 ========================================== */
 
 .drift-button {
     width: 100%;
-    min-height: 52px;
+    min-height: 60px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    gap: 10px;
+    gap: 12px;
 
     border: 0;
-    border-radius: 10px;
+    border-radius: 11px;
 
     background: #fff;
 
     color: #000;
 
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 950;
 
-    letter-spacing: 0.16em;
+    letter-spacing: 0.17em;
 
     cursor: pointer;
 
@@ -703,12 +752,13 @@ select {
     background: #e7e7e7;
 
     box-shadow:
-        0 12px 35px rgba(255, 255, 255, 0.12);
+        0 14px 40px rgba(255, 255, 255, 0.13);
 }
 
 .drift-button span {
-    font-size: 16px;
+    font-size: 18px;
 }
+
 
 /* ==========================================
    PLATFORM LINK
@@ -721,13 +771,11 @@ select {
     align-items: center;
     justify-content: space-between;
 
-    padding: 11px 2px 0;
+    padding: 5px 2px 0;
 
-    color: rgba(255, 255, 255, 0.36);
+    color: rgba(255, 255, 255, 0.38);
 
-    text-decoration: none;
-
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 800;
 
     letter-spacing: 0.12em;
@@ -738,6 +786,7 @@ select {
 .platform-link:hover {
     color: #fff;
 }
+
 
 /* ==========================================
    LOADING
@@ -766,177 +815,71 @@ select {
     letter-spacing: 0.3em;
 }
 
+
 /* ==========================================
-   TABLET
+   LARGE DESKTOP
 ========================================== */
 
-@media (max-width: 1150px) {
+@media (min-width: 1800px) {
+
+    .drift-layout {
+        width: calc(100% - 100px);
+        max-width: 2300px;
+
+        grid-template-columns:
+            360px
+            minmax(0, 1fr)
+            420px;
+
+        gap: 36px;
+    }
+
+    .side-rail {
+        padding: 30px;
+    }
+
+    .featured-name {
+        font-size: 27px;
+    }
+
+    .control-select,
+    .game-search-input,
+    .selected-game {
+        min-height: 54px;
+    }
+
+    .drift-button {
+        min-height: 66px;
+        font-size: 14px;
+    }
+}
+
+
+/* ==========================================
+   TABLET / SMALL DESKTOP
+========================================== */
+
+@media (max-width: 1200px) and (min-width: 851px) {
 
     .drift-layout {
         width: calc(100% - 40px);
 
         grid-template-columns:
-            180px
+            260px
             minmax(0, 1fr)
-            230px;
+            310px;
 
-        gap: 18px;
+        gap: 20px;
     }
 
     .side-rail {
-        padding: 17px;
-    }
-
-}
-
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media (max-width: 850px) {
-
-    .app-header {
-        height: auto;
-
         padding: 20px;
-
-        flex-direction: column;
-        align-items: flex-start;
-
-        gap: 8px;
     }
 
-    .app-tagline {
-        margin-left: 0;
-
-        font-size: 9px;
-    }
-
-    /*
-       IMPORTANT:
-       The main layout NEVER stacks.
-       Featured | Player | Controls remain
-       three columns at every viewport width.
-    */
-
-    .drift-layout {
-        width: calc(100% - 32px);
-
-        display: grid;
-
-        grid-template-columns:
-            140px
-            minmax(0, 1fr)
-            180px;
-
-        gap: 12px;
-
-        align-items: center;
-
-        padding-top: 10px;
-    }
-
-    .player-stage {
-        order: unset;
-    }
-
-    .featured-rail {
-        order: unset;
-    }
-
+    .featured-rail,
     .controls-rail {
-        order: unset;
+        min-height: 430px;
     }
-
-    .side-rail {
-        min-height: 0;
-
-        padding: 14px;
-    }
-
-    .featured-card {
-        display: block;
-    }
-
-    .featured-image-wrap {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 1 / 1;
-    }
-
-    .featured-platform {
-        margin-top: 10px;
-    }
-
-    .featured-button {
-        margin-top: 10px;
-    }
-
-}
-
-/* ==========================================
-   SMALL MOBILE
-========================================== */
-
-@media (max-width: 520px) {
-
-    .app-logo {
-        width: 130px;
-    }
-
-    .app-tagline {
-        display: none;
-    }
-
-    .drift-layout {
-        width: calc(100% - 20px);
-    }
-
-    .player-frame {
-        border-radius: 10px;
-    }
-
-}/* ==========================================
-   CENTERED HEADER
-========================================== */
-
-.app-header {
-    position: relative;
-    z-index: 5;
-
-    width: 100%;
-    height: auto;
-    min-height: 145px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-
-    padding: 18px 20px 0;
-    gap: 8px;
-}
-
-.app-logo {
-    width: 155px;
-    height: auto;
-    display: block;
-    flex-shrink: 0;
-}
-
-.app-tagline {
-    margin: 0;
-
-    color: rgba(255, 255, 255, 0.48);
-
-    font-size: 12px;
-    font-weight: 500;
-
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    text-align: center;
-
-    line-height: 1.4;
 }
 
 
@@ -949,15 +892,17 @@ select {
     .app {
         width: 100%;
         min-height: 100vh;
-        padding: 12px 14px 40px;
-        overflow-x: hidden;
+
+        padding: 0 14px 40px;
     }
 
     .app-header {
         width: 100%;
-        min-height: 120px;
-        height: auto;
-        padding: 4px 0 10px;
+
+        min-height: 118px;
+
+        padding: 8px 0 14px;
+
         gap: 6px;
     }
 
@@ -967,77 +912,130 @@ select {
     }
 
     .app-tagline {
-        max-width: 300px;
+        max-width: 320px;
+
         font-size: 8px;
+
         line-height: 1.4;
+
         letter-spacing: 0.10em;
+
         text-align: center;
     }
+
+
+    /* ======================================
+       MOBILE ORDER:
+       FEATURED
+       PLAYER
+       CONTROLS
+    ====================================== */
 
     .drift-layout {
         width: 100%;
         max-width: 600px;
+
         min-height: 0;
 
-        display: grid;
-        grid-template-columns: 1fr;
+        margin: 0 auto;
+
+        display: flex;
+        flex-direction: column;
 
         gap: 16px;
-        align-items: stretch;
 
-        margin: 0 auto;
         padding: 0;
     }
 
-    .player-stage {
+
+    /* FEATURED FIRST */
+
+    .featured-rail {
         order: 1;
+
+        width: 100%;
+
+        min-height: 0;
+
+        padding: 18px;
+    }
+
+    .featured-image-wrap {
+        width: 100%;
+        max-width: 240px;
+
+        margin: 0 auto;
+    }
+
+    .featured-platform {
+        margin-top: 14px;
+
+        font-size: 10px;
+    }
+
+    .featured-name {
+        font-size: 23px;
+    }
+
+    .featured-button {
+        min-height: 54px;
+
+        margin-top: 16px;
+
+        font-size: 11px;
+    }
+
+
+    /* PLAYER SECOND */
+
+    .player-stage {
+        order: 2;
+
         width: 100%;
         min-width: 0;
     }
 
     .player-frame {
         width: 100%;
+
         aspect-ratio: 16 / 9;
+
         border-radius: 12px;
     }
 
-    .featured-rail {
-        order: 2;
-        width: 100%;
-        min-height: 0;
-        padding: 18px;
-    }
 
-    .featured-image-wrap {
-        width: 100%;
-        max-width: 220px;
-        margin: 0 auto;
-    }
-
-    .featured-name {
-        font-size: 22px;
-    }
+    /* CONTROLS THIRD */
 
     .controls-rail {
         order: 3;
+
         width: 100%;
+
         min-height: 0;
-        padding: 18px;
+
+        padding: 20px 18px;
     }
 
     .discover-controls {
         width: 100%;
-        gap: 16px;
+
+        gap: 18px;
     }
 
     .control-group {
         width: 100%;
     }
 
+    .control-group label {
+        font-size: 10px;
+    }
+
     .control-select,
     .game-search-input,
     .selected-game {
         width: 100%;
+
+        min-height: 52px;
     }
 
     .platform-selector {
@@ -1045,12 +1043,13 @@ select {
     }
 
     .platform-button {
-        min-height: 44px;
+        min-height: 46px;
     }
 
     .drift-button {
         width: 100%;
-        min-height: 58px;
+
+        min-height: 60px;
     }
 
     .platform-link {
@@ -1066,18 +1065,22 @@ select {
 @media (max-width: 520px) {
 
     .app {
-        padding: 8px 12px 32px;
+        padding: 0 10px 30px;
     }
 
     .app-header {
-        min-height: 112px;
+        min-height: 105px;
+
+        padding: 5px 0 12px;
     }
 
     .app-logo {
-        width: 115px;
+        width: 112px;
     }
 
     .app-tagline {
+        max-width: 280px;
+
         font-size: 7px;
     }
 
@@ -1085,12 +1088,32 @@ select {
         gap: 14px;
     }
 
+    .side-rail {
+        padding: 16px;
+
+        border-radius: 14px;
+    }
+
+    .featured-image-wrap {
+        max-width: 210px;
+    }
+
+    .featured-name {
+        font-size: 21px;
+    }
+
     .player-frame {
         border-radius: 10px;
     }
 
-    .side-rail {
-        padding: 16px;
-        border-radius: 14px;
+    .controls-rail {
+        padding: 18px 16px;
     }
 }
+'@
+
+[System.IO.File]::WriteAllText(
+    (Resolve-Path ".\src\styles\app.css"),
+    $css,
+    [System.Text.UTF8Encoding]::new($false)
+)
