@@ -1,649 +1,983 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    box-sizing: border-box;
 }
 
 html,
 body,
-#root{
-    width:100%;
-    height:100%;
-    background:#000;
-    color:#f5f5f5;
-    font-family:Inter,Segoe UI,sans-serif;
+#root {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-body{
-    overflow-x:hidden;
-    overflow-y:auto;
-    position:relative;
-}
-
-a{
-    color:inherit;
-    text-decoration:none;
+body {
+    background: #000;
+    color: #fff;
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
 }
 
 button,
-select{
-    font:inherit;
+input,
+select {
+    font: inherit;
 }
 
-/* ===========================
-   BACKGROUND
-=========================== */
+/* ==========================================
+   APP
+========================================== */
 
-.background-video{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    z-index:-2;
-    pointer-events:none;
-    user-select:none;
+.app {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+    background: #000;
 }
 
-.background-overlay{
-    position:fixed;
-    inset:0;
+.background-video {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.background-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+
     background:
         radial-gradient(
-            circle at center,
-            rgba(0,0,0,.15) 0%,
-            rgba(0,0,0,.40) 55%,
-            rgba(0,0,0,.70) 100%
+            ellipse at center,
+            rgba(0, 0, 0, 0.18) 0%,
+            rgba(0, 0, 0, 0.55) 65%,
+            rgba(0, 0, 0, 0.82) 100%
         );
-    z-index:-1;
-    pointer-events:none;
 }
 
-/* ===========================
-   APP
-=========================== */
+/* ==========================================
+   HEADER
+========================================== */
 
-.app{
-    position:relative;
-    width:100%;
-    min-height:100%;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:32px;
-    gap:28px;
-    z-index:1;
+.app-header {
+    position: relative;
+    z-index: 5;
+
+    width: 100%;
+    height: 100px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 24px 42px;
 }
 
-.loading-screen{
-    position:relative;
-    width:100%;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:#000;
-    overflow:hidden;
+.app-logo {
+    width: 155px;
+    height: auto;
+    display: block;
 }
 
-.loading{
-    position:relative;
-    z-index:1;
-    width:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:22px;
-    font-weight:700;
-    letter-spacing:.12em;
-    text-transform:uppercase;
+.app-tagline {
+    margin: 0 0 0 24px;
+
+    color: rgba(255, 255, 255, 0.48);
+
+    font-size: 12px;
+    font-weight: 500;
+
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
-.app-header{
-    width:min(92vw,1500px);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:18px;
+/* ==========================================
+   MAIN THREE COLUMN LAYOUT
+========================================== */
+
+.drift-layout {
+    position: relative;
+    z-index: 5;
+
+    width: calc(100% - 72px);
+    max-width: 1700px;
+
+    min-height: calc(100vh - 100px);
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        220px
+        minmax(0, 1fr)
+        280px;
+
+    gap: 28px;
+
+    align-items: center;
+
+    padding: 20px 0 40px;
 }
 
-.app-logo{
-    max-width:220px;
-    width:100%;
-    height:auto;
-    display:block;
-}
+/* ==========================================
+   SIDE RAILS
+========================================== */
 
-.app-tagline{
-    max-width:560px;
-    text-align:center;
-    color:#cfcfcf;
-    font-size:18px;
-    line-height:1.6;
-}
+.side-rail {
+    height: fit-content;
+    min-height: 420px;
 
-.language-select{
-    background:rgba(17,17,17,.82);
-    backdrop-filter:blur(10px);
-    color:#fff;
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:999px;
-    padding:12px 20px;
-    cursor:pointer;
-}
+    padding: 22px;
 
-.language-select:focus{
-    outline:none;
-    border-color:#ffffff;
-}
+    background:
+        linear-gradient(
+            180deg,
+            rgba(12, 12, 12, 0.82),
+            rgba(5, 5, 5, 0.68)
+        );
 
-/* ===========================
-   PLATFORM SELECTOR
-=========================== */
+    border: 1px solid rgba(255, 255, 255, 0.10);
 
-.platform-selector{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    padding:5px;
-    background:rgba(17,17,17,.82);
-    backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:999px;
-}
+    border-radius: 18px;
 
-.platform-button{
-    min-width:120px;
-    padding:11px 24px;
-    border:none;
-    border-radius:999px;
-    background:transparent;
-    color:rgba(255,255,255,.55);
-    cursor:pointer;
-    font-size:15px;
-    font-weight:800;
-    letter-spacing:.06em;
-    transition:
-        background .2s ease,
-        color .2s ease,
-        transform .2s ease;
-}
+    backdrop-filter: blur(18px);
 
-.platform-button:hover{
-    color:#ffffff;
-}
-
-.platform-button.active{
-    background:#ffffff;
-    color:#000000;
-}
-
-.platform-button.active:hover{
-    transform:translateY(-1px);
-}
-
-/* ===========================
-   PLAYER
-=========================== */
-
-.drift-player{
-    width:min(92vw,1500px);
-    aspect-ratio:16/9;
-    background:#000;
-    border-radius:18px;
-    overflow:hidden;
     box-shadow:
-        0 0 80px rgba(0,0,0,.65),
-        0 30px 80px rgba(0,0,0,.55);
+        0 24px 70px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-.drift-player iframe{
-    width:100%;
-    height:100%;
-    border:none;
-    display:block;
+.rail-label {
+    margin-bottom: 22px;
+
+    color: rgba(255, 255, 255, 0.52);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
 }
 
-/* ===========================
-   INFO
-=========================== */
+/* ==========================================
+   FEATURED
+========================================== */
 
-.drift-info{
-    width:min(92vw,1500px);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    text-align:center;
-    gap:10px;
+.featured-rail {
+    display: flex;
+    flex-direction: column;
 }
 
-.stream-name{
-    margin:0 0 8px;
-    font-size:2.2rem;
-    font-weight:900;
-    line-height:1.1;
+.featured-card {
+    width: 100%;
 }
 
-.drift-info h2{
-    margin:0 0 10px;
-    font-size:1.3rem;
-    font-weight:500;
-    line-height:1.3;
+.featured-image-wrap {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+
+    overflow: hidden;
+
+    border-radius: 12px;
+
+    background: #080808;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.stream-category{
-    font-size:20px;
-    color:#bdbdbd;
+.featured-image {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
 }
 
-.stream-live{
-    font-size:18px;
-    color:#ff4d4d;
-    font-weight:600;
+.featured-platform {
+    margin-top: 14px;
+
+    color: rgba(255, 255, 255, 0.42);
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 0.18em;
 }
 
-/* ===========================
-   ACTIONS
-=========================== */
+.featured-name {
+    margin-top: 5px;
 
-.drift-actions{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:16px;
+    color: #fff;
+
+    font-size: 18px;
+    font-weight: 800;
+
+    line-height: 1.1;
+
+    word-break: break-word;
 }
 
-.drift-controls{
-    display:flex;
-    gap:12px;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:wrap;
-}
+.featured-button {
+    width: 100%;
 
-.game-search{
-    position:relative;
-    width:260px;
-}
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-.game-search-input{
-    width:100%;
-    box-sizing:border-box;
-    background:rgba(17,17,17,.82);
-    backdrop-filter:blur(10px);
-    color:#fff;
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:999px;
-    padding:12px 18px;
-    outline:none;
-    font:inherit;
-}
+    margin-top: 16px;
+    padding: 12px 13px;
 
-.game-search-input::placeholder{
-    color:rgba(255,255,255,.5);
-}
+    border-radius: 9px;
 
-.game-search-input:focus{
-    border-color:rgba(255,255,255,.35);
-}
+    text-decoration: none;
 
-.game-results{
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:calc(100% + 8px);
-    max-height:280px;
-    overflow-y:auto;
-    background:rgba(12,12,12,.96);
-    backdrop-filter:blur(14px);
-    border:1px solid rgba(255,255,255,.12);
-    border-radius:14px;
-    padding:6px;
-    z-index:20;
-    box-shadow:0 12px 40px rgba(0,0,0,.45);
-}
+    color: #000;
+    background: #fff;
 
-.game-result{
-    width:100%;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:8px;
-    border:0;
-    border-radius:10px;
-    background:transparent;
-    color:#fff;
-    cursor:pointer;
-    text-align:left;
-    font:inherit;
-}
+    font-size: 10px;
+    font-weight: 900;
 
-.game-result:hover{
-    background:rgba(255,255,255,.08);
-}
+    letter-spacing: 0.08em;
 
-.game-result img{
-    width:36px;
-    height:48px;
-    object-fit:cover;
-    border-radius:5px;
-    flex-shrink:0;
-}
-
-.game-result span{
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-}
-
-.game-search-status{
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:calc(100% + 8px);
-    padding:12px 16px;
-    background:rgba(12,12,12,.96);
-    backdrop-filter:blur(14px);
-    border:1px solid rgba(255,255,255,.12);
-    border-radius:12px;
-    color:rgba(255,255,255,.65);
-    font-size:14px;
-    z-index:20;
-}
-
-.selected-game{
-    width:260px;
-    box-sizing:border-box;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    background:rgba(17,17,17,.82);
-    backdrop-filter:blur(10px);
-    color:#fff;
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:999px;
-    padding:5px 8px 5px 6px;
-}
-
-.selected-game img{
-    width:32px;
-    height:40px;
-    object-fit:cover;
-    border-radius:5px;
-    flex-shrink:0;
-}
-
-.selected-game span{
-    flex:1;
-    min-width:0;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-}
-
-.clear-game{
-    width:28px;
-    height:28px;
-    flex-shrink:0;
-    border:0;
-    border-radius:50%;
-    background:rgba(255,255,255,.08);
-    color:rgba(255,255,255,.7);
-    cursor:pointer;
-    font-size:20px;
-    line-height:1;
-}
-
-.clear-game:hover{
-    background:rgba(255,255,255,.16);
-    color:#fff;
-}
-
-.drift-button{
-    background:#ffffff;
-    color:#000;
-    border:none;
-    border-radius:999px;
-    padding:16px 54px;
-    cursor:pointer;
-    font-size:18px;
-    font-weight:800;
-    letter-spacing:.15em;
     transition:
-        transform .2s ease,
-        box-shadow .2s ease;
+        transform 0.18s ease,
+        background 0.18s ease;
 }
 
-.drift-mode{
-    background:rgba(17,17,17,.82);
-    backdrop-filter:blur(10px);
-    color:#fff;
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:999px;
-    padding:16px 22px;
-    cursor:pointer;
-    transition:border-color .2s ease;
+.featured-button:hover {
+    transform: translateY(-2px);
+    background: #e8e8e8;
 }
 
-.drift-mode:focus{
-    outline:none;
-    border-color:#ffffff;
+.featured-button.kick {
+    background: #53ff8a;
 }
 
-.drift-button:hover{
-    transform:translateY(-2px);
-    box-shadow:0 12px 32px rgba(255,255,255,.18);
+.featured-button.kick:hover {
+    background: #37ef72;
 }
 
-.platform-link{
-    color:#bdbdbd;
-    font-size:15px;
-    transition:color .2s ease;
+.featured-button span {
+    font-size: 13px;
 }
 
-.platform-link:hover{
-    color:#ffffff;
+.featured-loading,
+.featured-empty {
+    color: rgba(255, 255, 255, 0.35);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 0.12em;
 }
 
-.platform-link.twitch{
-    color:#bdbdbd;
+/* ==========================================
+   CENTER PLAYER
+========================================== */
+
+.player-stage {
+    min-width: 0;
+    width: 100%;
 }
 
-.platform-link.kick{
-    color:#bdbdbd;
-}
+.player-frame {
+    position: relative;
 
-/* ===========================
-   EMPTY STATE
-=========================== */
+    width: 100%;
+    aspect-ratio: 16 / 9;
 
-.empty-state{
-    justify-content:center;
-    min-height:100vh;
-}
+    overflow: hidden;
 
-.no-streams{
-    width:min(92vw,600px);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    text-align:center;
-    gap:14px;
-    padding:48px 32px;
-    background:rgba(10,10,10,.72);
-    backdrop-filter:blur(16px);
-    border:1px solid rgba(255,255,255,.12);
-    border-radius:24px;
+    background: #000;
+
+    border-radius: 16px;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
     box-shadow:
-        0 20px 80px rgba(0,0,0,.45);
+        0 30px 100px rgba(0, 0, 0, 0.72),
+        0 0 80px rgba(0, 0, 0, 0.40);
 }
 
-.no-streams-icon{
-    font-size:48px;
-    opacity:.7;
+.player-frame .drift-player {
+    width: 100%;
+    height: 100%;
+
+    aspect-ratio: auto;
+
+    margin: 0;
+
+    border-radius: 0;
+
+    box-shadow: none;
 }
 
-.no-streams h2{
-    font-size:28px;
-    font-weight:800;
+.player-frame .drift-player iframe {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    border: 0;
 }
 
-.no-streams p{
-    color:#aaa;
-    font-size:16px;
-    line-height:1.6;
-    max-width:420px;
+.player-empty {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    color: rgba(255, 255, 255, 0.60);
+
+    text-align: center;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
 }
 
-/* ===========================
-   MOBILE
-=========================== */
+.player-empty span {
+    color: rgba(255, 255, 255, 0.32);
 
-@media (max-width:900px){
+    font-size: 11px;
+    font-weight: 500;
 
-    .app{
-        padding:18px;
-        gap:22px;
+    letter-spacing: 0;
+}
+
+.player-loading {
+    position: absolute;
+
+    top: 16px;
+    right: 16px;
+
+    padding: 7px 10px;
+
+    border-radius: 6px;
+
+    background: rgba(0, 0, 0, 0.76);
+
+    color: rgba(255, 255, 255, 0.72);
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 0.14em;
+
+    pointer-events: none;
+}
+
+/* ==========================================
+   RIGHT CONTROLS
+========================================== */
+
+.controls-rail {
+    display: flex;
+    flex-direction: column;
+}
+
+.discover-controls {
+    display: flex;
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+.control-group {
+    width: 100%;
+}
+
+.control-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: rgba(255, 255, 255, 0.42);
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 0.16em;
+}
+
+.control-select,
+.game-search-input,
+.selected-game {
+    width: 100%;
+
+    min-height: 44px;
+
+    border: 1px solid rgba(255, 255, 255, 0.11);
+
+    border-radius: 9px;
+
+    background: rgba(255, 255, 255, 0.055);
+
+    color: #fff;
+
+    outline: none;
+}
+
+.control-select {
+    padding: 0 12px;
+
+    cursor: pointer;
+
+    appearance: auto;
+}
+
+.control-select:focus,
+.game-search-input:focus {
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.control-select option {
+    background: #111;
+    color: #fff;
+}
+
+/* ==========================================
+   PLATFORM
+========================================== */
+
+.platform-selector {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 4px;
+
+    padding: 4px;
+
+    border-radius: 9px;
+
+    background: rgba(255, 255, 255, 0.055);
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.platform-button {
+    min-height: 36px;
+
+    border: 0;
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: rgba(255, 255, 255, 0.35);
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 0.08em;
+
+    cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        color 0.18s ease;
+}
+
+.platform-button:hover {
+    color: #fff;
+}
+
+.platform-button.active {
+    background: #fff;
+    color: #000;
+}
+
+/* ==========================================
+   GAME SEARCH
+========================================== */
+
+.game-search {
+    position: relative;
+    width: 100%;
+}
+
+.game-search-input {
+    padding: 0 12px;
+
+    color: #fff;
+
+    font-size: 12px;
+}
+
+.game-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.30);
+}
+
+.selected-game {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 4px 7px 4px 4px;
+}
+
+.selected-game img {
+    width: 32px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    object-fit: cover;
+
+    border-radius: 5px;
+}
+
+.selected-game span {
+    flex: 1;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    font-size: 11px;
+}
+
+.clear-game {
+    width: 26px;
+    height: 26px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: rgba(255, 255, 255, 0.55);
+
+    cursor: pointer;
+}
+
+.clear-game:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.game-results,
+.game-search-status {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    top: calc(100% + 7px);
+
+    z-index: 50;
+
+    overflow: hidden;
+
+    background: rgba(8, 8, 8, 0.98);
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 18px 50px rgba(0, 0, 0, 0.70);
+}
+
+.game-results {
+    max-height: 260px;
+
+    overflow-y: auto;
+
+    padding: 5px;
+}
+
+.game-result {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 7px;
+
+    border: 0;
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #fff;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.game-result:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.game-result img {
+    width: 30px;
+    height: 40px;
+
+    object-fit: cover;
+
+    border-radius: 4px;
+
+    flex-shrink: 0;
+}
+
+.game-result span {
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    font-size: 11px;
+}
+
+.game-search-status {
+    padding: 12px;
+
+    color: rgba(255, 255, 255, 0.42);
+
+    font-size: 10px;
+
+    letter-spacing: 0.08em;
+}
+
+/* ==========================================
+   DRIFT BUTTON
+========================================== */
+
+.drift-button {
+    width: 100%;
+    min-height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    border: 0;
+    border-radius: 10px;
+
+    background: #fff;
+
+    color: #000;
+
+    font-size: 12px;
+    font-weight: 950;
+
+    letter-spacing: 0.16em;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.drift-button:hover {
+    transform: translateY(-2px);
+
+    background: #e7e7e7;
+
+    box-shadow:
+        0 12px 35px rgba(255, 255, 255, 0.12);
+}
+
+.drift-button span {
+    font-size: 16px;
+}
+
+/* ==========================================
+   PLATFORM LINK
+========================================== */
+
+.platform-link {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 11px 2px 0;
+
+    color: rgba(255, 255, 255, 0.36);
+
+    text-decoration: none;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 0.12em;
+
+    transition: color 0.18s ease;
+}
+
+.platform-link:hover {
+    color: #fff;
+}
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.loading-screen {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #000;
+}
+
+.loading-mark {
+    position: relative;
+    z-index: 5;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    font-size: 12px;
+    font-weight: 900;
+
+    letter-spacing: 0.3em;
+}
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 1150px) {
+
+    .drift-layout {
+        width: calc(100% - 40px);
+
+        grid-template-columns:
+            180px
+            minmax(0, 1fr)
+            230px;
+
+        gap: 18px;
     }
 
-    .app-logo{
-        max-width:180px;
-    }
-
-    .app-tagline{
-        font-size:16px;
-    }
-
-    .language-select{
-        width:100%;
-        max-width:320px;
-    }
-
-    .drift-player{
-        width:100%;
-        border-radius:14px;
-    }
-
-    .drift-info h2{
-        font-size:26px;
-    }
-
-    .stream-category{
-        font-size:18px;
-    }
-
-    .stream-live{
-        font-size:16px;
-    }
-
-    .drift-button{
-        width:100%;
-        max-width:320px;
-    }
-
-    .drift-controls{
-        width:100%;
-        flex-direction:column;
-    }
-
-    .game-search,
-    .selected-game{
-        width:100%;
-    }
-
-    .drift-mode{
-        width:100%;
-        max-width:360px;
-        height:54px;
+    .side-rail {
+        padding: 17px;
     }
 
 }
 
 /* ==========================================
-   MOBILE LAYOUT
+   MOBILE
 ========================================== */
 
-@media (max-width:768px){
+@media (max-width: 850px) {
 
-    .app{
-        padding:16px;
-        gap:20px;
+    .app-header {
+        height: auto;
+
+        padding: 20px;
+
+        flex-direction: column;
+        align-items: flex-start;
+
+        gap: 8px;
     }
 
-    .app-header{
-        gap:14px;
+    .app-tagline {
+        margin-left: 0;
+
+        font-size: 9px;
     }
 
-    .app-logo{
-        width:150px;
-        max-width:60vw;
+    /*
+       IMPORTANT:
+       The main layout NEVER stacks.
+       Featured | Player | Controls remain
+       three columns at every viewport width.
+    */
+
+    .drift-layout {
+        width: calc(100% - 32px);
+
+        display: grid;
+
+        grid-template-columns:
+            140px
+            minmax(0, 1fr)
+            180px;
+
+        gap: 12px;
+
+        align-items: center;
+
+        padding-top: 10px;
     }
 
-    .app-tagline{
-        display:none;
+    .player-stage {
+        order: unset;
     }
 
-    .language-select{
-        width:100%;
-        max-width:340px;
-        height:46px;
-        font-size:16px;
+    .featured-rail {
+        order: unset;
     }
 
-    .drift-player{
-        width:100%;
-        aspect-ratio:16/9;
-        border-radius:14px;
+    .controls-rail {
+        order: unset;
     }
 
-    .drift-info{
-        width:100%;
-        gap:8px;
-        padding:0 8px;
+    .side-rail {
+        min-height: 0;
+
+        padding: 14px;
     }
 
-    .drift-info h2{
-        font-size:22px;
-        line-height:1.2;
-        max-width:100%;
-        display:-webkit-box;
-        -webkit-line-clamp:2;
-        -webkit-box-orient:vertical;
-        overflow:hidden;
+    .featured-card {
+        display: block;
     }
 
-    .stream-category{
-        font-size:17px;
+    .featured-image-wrap {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
     }
 
-    .stream-live{
-        font-size:16px;
+    .featured-platform {
+        margin-top: 10px;
     }
 
-    .drift-actions{
-        width:100%;
-        gap:12px;
+    .featured-button {
+        margin-top: 10px;
     }
 
-    .drift-button{
-        width:100%;
-        height:54px;
-        max-width:360px;
-        font-size:17px;
+}
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
+
+@media (max-width: 520px) {
+
+    .app-logo {
+        width: 130px;
     }
 
-    .platform-selector{
-        width:100%;
-        max-width:340px;
+    .app-tagline {
+        display: none;
     }
 
-    .platform-button{
-        flex:1;
+    .drift-layout {
+        width: calc(100% - 20px);
     }
 
-    .platform-link{
-        font-size:15px;
+    .player-frame {
+        border-radius: 10px;
     }
 
+}.app-header {
+    position: relative;
+    z-index: 5;
+
+    width: 100%;
+    min-height: 150px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px 20px 0;
+
+    gap: 10px;
+}
+
+.app-logo {
+    width: 155px;
+    height: auto;
+    display: block;
+}
+
+.app-tagline {
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.48);
+
+    font-size: 12px;
+    font-weight: 500;
+
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+
+    text-align: center;
+}
+.app-header {
+    min-height: 110px;
+    padding: 8px 20px 0;
+    gap: 6px;
+}
+
+.drift-layout {
+    min-height: 0;
+    padding: 10px 0 40px;
+    align-items: center;
+}
+.app-header {
+    position: relative;
+    z-index: 5;
+
+    width: 100%;
+    height: auto;
+    min-height: 145px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    padding: 18px 20px 0;
+    gap: 8px;
+}
+
+.app-logo {
+    width: 155px;
+    height: auto;
+    display: block;
+    flex-shrink: 0;
+}
+
+.app-tagline {
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.48);
+
+    font-size: 12px;
+    font-weight: 500;
+
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+
+    line-height: 1.4;
 }
