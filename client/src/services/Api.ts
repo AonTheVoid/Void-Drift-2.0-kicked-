@@ -14,6 +14,7 @@ export interface Stream {
     platform: Platform;
     channelName: string;
     channelLogin: string;
+    profileImageUrl?: string;
     title: string;
     category: string;
     categoryId?: string;
@@ -31,6 +32,44 @@ export interface GameResult {
     boxArtUrl: string;
 }
 
+export interface PickCreator {
+    slot: number;
+    platform: Platform;
+    channelLogin: string;
+    channelName: string;
+    profileImageUrl: string;
+    url: string;
+    updatedAt: string;
+}
+
+export interface PickStream {
+    platform: Platform;
+    channelName: string;
+    channelLogin: string;
+    title: string;
+    category: string;
+    categoryId?: string;
+    language: string;
+    viewers: number;
+    thumbnail: string;
+    url: string;
+    startedAt: string;
+    mature: boolean;
+    live: boolean;
+}
+
+export interface PickWithLiveData
+    extends PickCreator {
+    live: PickStream | null;
+}
+
+export interface CreatorProfile {
+    platform: Platform;
+    channelLogin: string;
+    channelName: string;
+    profileImageUrl: string;
+}
+
 const API = "/api";
 
 export async function GetRandomStream(
@@ -40,14 +79,29 @@ export async function GetRandomStream(
     categoryId?: string
 ): Promise<Stream> {
 
-    const params = new URLSearchParams();
+    const params =
+        new URLSearchParams();
 
-    params.set("platform", platform);
-    params.set("language", language);
-    params.set("mode", mode);
+    params.set(
+        "platform",
+        platform
+    );
+
+    params.set(
+        "language",
+        language
+    );
+
+    params.set(
+        "mode",
+        mode
+    );
 
     if (categoryId) {
-        params.set("categoryId", categoryId);
+        params.set(
+            "categoryId",
+            categoryId
+        );
     }
 
     const response =
@@ -61,7 +115,32 @@ export async function GetRandomStream(
         );
     }
 
-    return await response.json();
+    const stream: Stream =
+    await response.json();
+
+try {
+
+    const profile =
+        await GetCreatorProfile(
+            platform,
+            stream.channelLogin
+        );
+
+    return {
+        ...stream,
+        profileImageUrl:
+            profile.profileImageUrl
+    };
+
+} catch (error) {
+
+    console.error(
+        "Unable to load creator profile.",
+        error
+    );
+
+    return stream;
+}
 }
 
 export async function SearchGames(
@@ -90,6 +169,77 @@ export async function SearchGames(
     if (!response.ok) {
         throw new Error(
             "Unable to search games."
+        );
+    }
+
+    return await response.json();
+}
+
+export async function GetPicks():
+    Promise<PickWithLiveData[]> {
+
+    const response =
+        await fetch(
+            `${API}/picks`
+        );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load Drift Picks."
+        );
+    }
+
+    return await response.json();
+}
+
+export async function GetPickStream(
+    slot: number
+): Promise<PickStream | null> {
+
+    const response =
+        await fetch(
+            `${API}/picks/${slot}/stream`
+        );
+
+    if (response.status === 404) {
+        return null;
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load Pick stream."
+        );
+    }
+
+    return await response.json();
+}
+
+export async function GetCreatorProfile(
+    platform: Platform,
+    channelLogin: string
+): Promise<CreatorProfile> {
+
+    const params =
+        new URLSearchParams();
+
+    params.set(
+        "platform",
+        platform
+    );
+
+    params.set(
+        "login",
+        channelLogin
+    );
+
+    const response =
+        await fetch(
+            `${API}/creator?${params.toString()}`
+        );
+
+    if (!response.ok) {
+        throw new Error(
+            "Unable to load creator profile."
         );
     }
 

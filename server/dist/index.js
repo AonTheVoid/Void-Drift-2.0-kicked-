@@ -10,6 +10,8 @@ const PlatformCacheService_1 = __importDefault(require("./services/PlatformCache
 const RandomRoute_1 = __importDefault(require("./routes/RandomRoute"));
 const SearchGamesRoute_1 = __importDefault(require("./routes/SearchGamesRoute"));
 const FeaturedRoute_1 = __importDefault(require("./routes/FeaturedRoute"));
+const PicksRoute_1 = __importDefault(require("./routes/PicksRoute"));
+const CreatorRoute_1 = __importDefault(require("./routes/CreatorRoute"));
 const Twitch_1 = __importDefault(require("./config/Twitch"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -24,13 +26,15 @@ app.get("/api/health", (_req, res) => {
 app.use("/api/random", RandomRoute_1.default);
 app.use("/api/search-games", SearchGamesRoute_1.default);
 app.use("/api/featured", FeaturedRoute_1.default);
+app.use("/api/picks", PicksRoute_1.default);
+app.use("/api/creator", CreatorRoute_1.default);
 async function refreshCaches() {
     console.log("");
     console.log("Refreshing platform stream caches...");
     const startedAt = Date.now();
     await PlatformCacheService_1.default.refreshAll();
-    const elapsed = ((Date.now() - startedAt) /
-        1000).toFixed(1);
+    const elapsed = ((Date.now() -
+        startedAt) / 1000).toFixed(1);
     console.log(`Platform cache refresh completed in ${elapsed}s.`);
 }
 async function start() {

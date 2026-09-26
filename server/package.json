@@ -9,7 +9,8 @@
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "featured": "node dist/scripts/SetFeatured.js"
+"featured": "node dist/scripts/SetFeatured.js",
+"pick": "node dist/scripts/SetPick.js"
   },
   "keywords": [
     "void-drift",

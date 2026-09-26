@@ -3,9 +3,13 @@ import dotenv from "dotenv";
 import express from "express";
 
 import PlatformCacheService from "./services/PlatformCacheService";
+
 import RandomRoute from "./routes/RandomRoute";
 import SearchGamesRoute from "./routes/SearchGamesRoute";
 import FeaturedRoute from "./routes/FeaturedRoute";
+import PicksRoute from "./routes/PicksRoute";
+import CreatorRoute from "./routes/CreatorRoute";
+
 import TwitchConfig from "./config/Twitch";
 
 dotenv.config();
@@ -19,13 +23,16 @@ app.use(cors());
 
 app.use(express.json());
 
-app.get("/api/health", (_req, res) => {
+app.get(
+    "/api/health",
+    (_req, res) => {
 
-    res.json({
-        status: "Running"
-    });
+        res.json({
+            status: "Running"
+        });
 
-});
+    }
+);
 
 app.use(
     "/api/random",
@@ -40,6 +47,16 @@ app.use(
 app.use(
     "/api/featured",
     FeaturedRoute
+);
+
+app.use(
+    "/api/picks",
+    PicksRoute
+);
+
+app.use(
+    "/api/creator",
+    CreatorRoute
 );
 
 async function refreshCaches(): Promise<void> {
@@ -57,8 +74,10 @@ async function refreshCaches(): Promise<void> {
 
     const elapsed =
         (
-            (Date.now() - startedAt) /
-            1000
+            (
+                Date.now() -
+                startedAt
+            ) / 1000
         ).toFixed(1);
 
     console.log(

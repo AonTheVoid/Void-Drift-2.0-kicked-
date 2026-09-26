@@ -1,0 +1,92 @@
+[
+    {
+        "slot": 1,
+        "platform": "twitch",
+        "channelLogin": "celthewitch",
+        "channelName": "CelTheWitch",
+        "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/de5e736a-aace-4c77-a62e-b7dfc5a84682-profile_image-300x300.png",
+        "url": "https://twitch.tv/celthewitch",
+        "updatedAt": "2026-09-26T12:34:14.684Z"
+    },
+    {
+        "slot": 2,
+        "platform": "twitch",
+        "channelLogin": "billygoat",
+        "channelName": "billygoat",
+        "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/b948bfc7-822d-40b6-813d-d369da6fd527-profile_image-300x300.png",
+        "url": "https://twitch.tv/billygoat",
+        "updatedAt": "2026-09-26T12:55:49.104Z"
+    },
+    {
+        "slot": 3,
+        "platform": "twitch",
+        "channelLogin": "omgitsphee",
+        "channelName": "OmgItsPhee",
+        "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/625eecd7-6a31-4e2b-b3ef-ff519a26634e-profile_image-300x300.png",
+        "url": "https://twitch.tv/omgitsphee",
+        "updatedAt": "2026-09-26T12:34:16.290Z"
+    },
+    {
+        "slot": 4,
+        "platform": "twitch",
+        "channelLogin": "nicari",
+        "channelName": "Nicari",
+        "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/f4544324-7e32-4045-8c75-01671a9fa91a-profile_image-300x300.png",
+        "url": "https://twitch.tv/nicari",
+        "updatedAt": "2026-09-26T12:34:17.102Z"
+    },
+    {
+        "slot": 5,
+        "platform": "twitch",
+        "channelLogin": "missmeowzaki",
+        "channelName": "MissMeowzaki",
+        "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/91f90050-232b-415b-afb9-dc5ae3dd5349-profile_image-300x300.png",
+        "url": "https://twitch.tv/missmeowzaki",
+        "updatedAt": "2026-09-26T12:34:17.919Z"
+    },
+    {
+        "slot": 6,
+        "platform": "twitch",
+        "channelLogin": "stellardasha",
+        "channelName": "stellardasha",
+        "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/01e24f76-1f4c-4d92-9cc2-e51f9316353d-profile_image-300x300.png",
+        "url": "https://twitch.tv/stellardasha",
+        "updatedAt": "2026-09-26T12:34:18.709Z"
+    },
+    {
+        "slot": 7,
+        "platform": "twitch",
+        "channelLogin": "marissaemmaa",
+        "channelName": "Marissaemmaa",
+        "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/d0c0be34-c400-4b3d-a8f2-3b8f86aae9d3-profile_image-300x300.png",
+        "url": "https://twitch.tv/marissaemmaa",
+        "updatedAt": "2026-09-26T12:34:19.512Z"
+    },
+    {
+        "slot": 8,
+        "platform": "twitch",
+        "channelLogin": "blair",
+        "channelName": "Blair",
+        "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/1593b30a-9656-40dd-baac-352eadf9fedd-profile_image-300x300.png",
+        "url": "https://twitch.tv/blair",
+        "updatedAt": "2026-09-26T12:34:20.319Z"
+    },
+    {
+        "slot": 9,
+        "platform": "twitch",
+        "channelLogin": "icedbone_",
+        "channelName": "IcedBone_",
+        "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/01400640-9f36-48b5-9300-4e705d438e31-profile_image-300x300.png",
+        "url": "https://twitch.tv/icedbone_",
+        "updatedAt": "2026-09-26T12:34:21.153Z"
+    },
+    {
+        "slot": 10,
+        "platform": "twitch",
+        "channelLogin": "tylerjedi",
+        "channelName": "TylerJedi",
+        "profileImageUrl": "https://static-cdn.jtvnw.net/jtv_user_pictures/312cd905-9431-49ab-843a-240874f61fec-profile_image-300x300.png",
+        "url": "https://twitch.tv/tylerjedi",
+        "updatedAt": "2026-09-26T12:34:21.973Z"
+    }
+]

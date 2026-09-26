@@ -19,6 +19,7 @@ Thumbs.db
 
 # Local Vite cache
 **/.vite/
+server/data/featured.json
 
 # Local TypeScript build info
 *.tsbuildinfo
