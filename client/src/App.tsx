@@ -113,35 +113,35 @@ export default function App() {
     const [picksLoading, setPicksLoading] =
         useState(true);
 
-const adImages = [
-    "/ads/ad-01.png",
-    "/ads/ad-02.png",
-    "/ads/ad-03.png",
-    "/ads/ad-04.png"
-];
+    const adImages = [
+        "/ads/ad-01.png",
+        "/ads/ad-02.png",
+        "/ads/ad-03.png",
+        "/ads/ad-04.png"
+    ];
 
-const [currentAd, setCurrentAd] =
-    useState(0);
+    const [currentAd, setCurrentAd] =
+        useState(0);
 
-useEffect(() => {
+    useEffect(() => {
 
-    if (adImages.length <= 1) {
-        return;
-    }
+        if (adImages.length <= 1) {
+            return;
+        }
 
-    const interval =
-        window.setInterval(() => {
+        const interval =
+            window.setInterval(() => {
 
-            setCurrentAd((current) =>
-                (current + 1) % adImages.length
-            );
+                setCurrentAd((current) =>
+                    (current + 1) % adImages.length
+                );
 
-        }, 5000);
+            }, 5000);
 
-    return () =>
-        window.clearInterval(interval);
+        return () =>
+            window.clearInterval(interval);
 
-}, []);
+    }, []);
 
     useEffect(() => {
 
@@ -716,6 +716,8 @@ useEffect(() => {
                                     <div
                                         className="placeholder-row"
                                         key={pick.slot}
+                                        onClick={() => SelectPick(pick)}
+                                        style={{ cursor: "pointer" }}
                                     >
 
                                         <div className="placeholder-avatar">
@@ -735,19 +737,15 @@ useEffect(() => {
 
                                         </div>
 
-                                        <div>
+                                        <strong>
+                                            {pick.channelName}
+                                        </strong>
 
-                                            <strong>
-                                                {pick.channelName}
-                                            </strong>
-
-                                            <span>
-                                                {pick.platform === "twitch"
-                                                    ? "TWITCH"
-                                                    : "KICK"}
-                                            </span>
-
-                                        </div>
+                                        <span>
+                                            {pick.platform === "twitch"
+                                                ? "TWITCH"
+                                                : "KICK"}
+                                        </span>
 
                                         <a
                                             href={pick.url}
@@ -758,13 +756,7 @@ useEffect(() => {
                                                 event.stopPropagation()
                                             }
                                         >
-                                            <span>
-                                                WATCH STREAM
-                                            </span>
-
-                                            <span>
-                                                ↗
-                                            </span>
+                                            WATCH STREAM
                                         </a>
 
                                     </div>
@@ -784,16 +776,16 @@ useEffect(() => {
                 <section className="center-column">
 
                     <div
-    className="player-frame"
-    style={
-        stream
-            ? {
-                "--stream-background":
-                    `url("${stream.thumbnail}")`
-            } as React.CSSProperties
-            : undefined
-    }
->
+                        className="player-frame"
+                        style={
+                            stream
+                                ? {
+                                    "--stream-background":
+                                        `url("${stream.thumbnail}")`
+                                } as React.CSSProperties
+                                : undefined
+                        }
+                    >
 
                         {stream ? (
 
@@ -810,8 +802,6 @@ useEffect(() => {
                             </div>
 
                         )}
-
-                        
 
                     </div>
 
@@ -848,45 +838,43 @@ useEffect(() => {
 
                 <aside className="right-column">
 
-<section className="right-ad-panel">
+                    <section className="right-ad-panel">
 
-    <span>
-        ADVERTISEMENT
-    </span>
+                        <span>
+                            ADVERTISEMENT
+                        </span>
 
-  <div className="ad-slideshow">
+                        <div className="ad-slideshow">
 
-    {adImages.map((image, index) => (
-        <img
-            key={image}
-            src={image}
-            alt="Advertisement"
-            className={`ad-slide ${
-                index === currentAd
-                    ? "ad-slide-active"
-                    : ""
-            }`}
-        />
-    ))}
+                            {adImages.map((image, index) => (
+                                <img
+                                    key={image}
+                                    src={image}
+                                    alt="Advertisement"
+                                    className={`ad-slide ${
+                                        index === currentAd
+                                            ? "ad-slide-active"
+                                            : ""
+                                    }`}
+                                />
+                            ))}
 
-</div>
+                        </div>
 
-<div className="ad-free-cta">
-    ADVERTISE YOUR STREAM HERE 
-FOR FREE
-</div>
+                        <div className="ad-free-cta">
+                            ADVERTISE YOUR STREAM HERE FOR FREE
+                        </div>
 
+                        <a
+                            href="https://aonthevoid.com/pages/contact"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="ad-contact-button"
+                        >
+                            CONTACT US
+                        </a>
 
-<a
-    href="https://aonthevoid.com/pages/contact"
-    target="_blank"
-    rel="noreferrer"
-    className="ad-contact-button"
->
-    CONTACT US
-</a>
-
-</section>
+                    </section>
 
                     <section className="panel controls-panel">
 

@@ -287,7 +287,6 @@ a {
     gap: 14px;
     width: 100%;
     
-    /* Changed from 76px to 94px to preserve the bottom gap */
     height: calc(100vh - 94px); 
     
     min-height: 0;
@@ -686,8 +685,8 @@ a {
     flex-direction: column;
     flex: 1;
     min-height: 0;
-    gap: 6px; /* Uniform spacing between the cards */
-    overflow: hidden; /* Locks out any scrollbars */
+    gap: 6px; 
+    overflow: hidden; 
 }
 
 .placeholder-row {
@@ -697,7 +696,6 @@ a {
     align-items: center;
     justify-items: center;
     
-    /* THIS IS THE FIX: Packs the rows tightly in the center of the card */
     align-content: center; 
     
     gap: 2px 12px; 
@@ -711,11 +709,12 @@ a {
     border-radius: 5px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0.012));
 }
+
 .placeholder-avatar {
     grid-column: 1 / 2;
-    grid-row: 1 / 4; /* Spans all 3 rows so it sits flush on the left */
+    grid-row: 1 / 4; 
     align-self: center; 
-    width: 48px; /* Restored to maximum size */
+    width: 48px; 
     height: 48px; 
     overflow: hidden;
     border-radius: 4px;
@@ -733,7 +732,7 @@ a {
 .placeholder-row strong {
     grid-column: 2 / 3;
     grid-row: 1 / 2;
-    text-align: center; /* Dead center */
+    text-align: center; 
     display: block;
     width: 100%;
     margin: 0;
@@ -750,7 +749,7 @@ a {
 .placeholder-row span {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
-    text-align: center; /* Dead center */
+    text-align: center; 
     display: block;
     margin: 0;
     color: rgba(255, 255, 255, 0.70);
@@ -764,13 +763,13 @@ a {
     grid-row: 3 / 4;
     
     display: flex;
-    flex-direction: row; /* Forces arrow and text side-by-side */
+    flex-direction: row; 
     align-items: center;
     justify-content: center;
     gap: 4px; 
     
-    width: max-content; /* Button hugs the text exactly */
-    height: 20px; /* Slimmer height to fit perfectly inside the accordion */
+    width: max-content; 
+    height: 20px; 
     margin: 2px 0 0 0;
     
     padding: 0 10px; 
@@ -785,7 +784,7 @@ a {
     letter-spacing: 0.05em;
     text-transform: uppercase;
     
-    white-space: nowrap; /* Completely prevents text stacking */
+    white-space: nowrap; 
     
     transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
 }
@@ -794,7 +793,9 @@ a {
     color: #eee8dc;
     border-color: rgba(255, 255, 255, 0.30);
     background: rgba(255, 255, 255, 0.07);
-}/* =========================================================
+}
+
+/* =========================================================
    RIGHT AD
    ========================================================= */
 
@@ -934,6 +935,7 @@ a {
 
     color: #ffffff;
 }
+
 /* =========================================================
    CONTROLS
    ========================================================= */
@@ -1537,7 +1539,6 @@ a {
     gap: 24px;
     min-height: 126px;
     
-    /* Pushes the panel to the exact bottom to eliminate the overhang */
     margin-top: auto; 
     
     padding: 16px 20px;
@@ -1623,11 +1624,6 @@ a {
 
     justify-content: center;
 }
-
-
-/*
-    KEEP THESE TWO AS-IS FOR NOW.
-*/
 
 .drift-info-name {
     margin:
@@ -1989,10 +1985,7 @@ a {
     .drift-layout {
         grid-template-columns: 250px minmax(0, 1fr) 250px;
         gap: 12px;
-        
-        /* Changed from 68px to 84px to preserve bottom gap */
         height: calc(100vh - 84px);
-    }
     }
 
     .brand-name {
@@ -2049,7 +2042,6 @@ a {
         font-size: 18px;
     }
 }
-
 
 /* =========================================================
    SMALLER DESKTOP
@@ -2148,14 +2140,162 @@ a {
 
 
 /* =========================================================
+   VOID PLAYER SURROUND / CINEMATIC MARRIAGE
+   ========================================================= */
+
+@media (min-width: 769px) {
+
+    .player-frame {
+        position: relative;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        overflow: hidden;
+
+        background:
+            radial-gradient(
+                ellipse at center,
+                rgba(80, 0, 20, 0.22) 0%,
+                rgba(20, 0, 8, 0.45) 32%,
+                rgba(0, 0, 0, 0.92) 72%,
+                #000 100%
+            );
+    }
+
+    .center-column .player-frame {
+
+        position: relative;
+
+        width: 100%;
+
+        height:
+            calc(
+                100% - 145px
+            );
+
+        max-height: none;
+
+        aspect-ratio: auto;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        overflow: hidden;
+
+        border-radius: 7px;
+
+        background: #000;
+        
+        border:
+            1px solid
+            rgba(255, 255, 255, 0.12);
+
+        box-shadow:
+            inset 0 0 60px
+            rgba(90, 0, 35, 0.12),
+
+            0 18px 55px
+            rgba(0, 0, 0, 0.42);
+
+        isolation: isolate;
+    }
+
+    .center-column .player-frame::before {
+        content: "";
+
+        position: absolute;
+
+        inset: -12%;
+
+        z-index: 0;
+
+        background-image:
+            var(--stream-background);
+
+        background-size: cover;
+
+        background-position: center;
+
+        filter:
+            blur(28px)
+            brightness(0.42)
+            saturate(0.75);
+
+        transform: scale(1.12);
+
+        opacity: 0.95;
+
+        pointer-events: none;
+    }
+
+    .center-column .player-frame::after {
+        content: "";
+
+        position: absolute;
+
+        inset: 0;
+
+        z-index: 1;
+
+        pointer-events: none;
+
+        background:
+            radial-gradient(
+                ellipse at center,
+                transparent 32%,
+                rgba(0, 0, 0, 0.18) 58%,
+                rgba(0, 0, 0, 0.62) 100%
+            );
+    }
+
+    .center-column .player-frame .drift-player {
+        position: relative;
+
+        z-index: 2;
+
+        width: auto !important;
+
+        height: 100% !important;
+
+        aspect-ratio: 16 / 9;
+
+        flex: 0 0 auto;
+
+        overflow: hidden;
+
+        background: #000;
+
+        box-shadow:
+            0 0 0 1px
+            rgba(255, 255, 255, 0.12),
+
+            0 0 35px
+            rgba(0, 0, 0, 0.75),
+
+            0 0 80px
+            rgba(0, 0, 0, 0.45);
+    }
+
+    .center-column .player-frame .drift-player iframe {
+        display: block;
+
+        width: 100%;
+        height: 100%;
+
+        border: 0;
+    }
+}
+
+
+/* =========================================================
    MOBILE FINAL LAYOUT
    ========================================================= */
 
 @media (max-width: 768px) {
-
-    /* =====================================================
-       PAGE SCROLL
-    ===================================================== */
 
     html,
     body,
@@ -2178,11 +2318,6 @@ a {
         overflow-y: auto;
     }
 
-
-    /* =====================================================
-       APP
-    ===================================================== */
-
     .app {
         width: 100%;
         min-width: 0;
@@ -2197,11 +2332,6 @@ a {
         overflow-x: hidden;
         overflow-y: visible;
     }
-
-
-    /* =====================================================
-       HEADER
-    ===================================================== */
 
     .app-header {
         position: relative;
@@ -2282,11 +2412,6 @@ a {
         display: none;
     }
 
-
-    /* =====================================================
-       MAIN LAYOUT
-       ===================================================== */
-
     .drift-layout {
         width: 100%;
         height: auto;
@@ -2303,32 +2428,12 @@ a {
         overflow: visible;
     }
 
-
-    /* =====================================================
-       UNWRAP DESKTOP COLUMNS
-       
-       This lets us order the individual panels:
-       
-       PLAYER
-       INFO
-       CONTROLS
-       FEATURED
-       PICKS
-       AD
-       PREVIOUS
-       ===================================================== */
-
     .left-column,
     .center-column,
     .right-column {
 
         display: contents;
     }
-
-
-    /* =====================================================
-       STREAM PLAYER
-       ===================================================== */
 
     .player-frame {
         order: 1;
@@ -2344,16 +2449,28 @@ a {
 
         overflow: hidden;
     }
-
-    .drift-player {
+    
+    .center-column .player-frame {
         width: 100%;
-        height: 100%;
+        height: auto;
+
+        aspect-ratio: 16 / 9;
+
+        overflow: hidden;
     }
 
+    .center-column .player-frame::before,
+    .center-column .player-frame::after {
+        display: none;
+    }
 
-    /* =====================================================
-       STREAM INFO
-       ===================================================== */
+    .drift-player,
+    .center-column .player-frame .drift-player {
+        width: 100% !important;
+        height: 100% !important;
+
+        aspect-ratio: auto;
+    }
 
     .stream-info-panel {
         order: 2;
@@ -2367,11 +2484,6 @@ a {
 
         box-sizing: border-box;
     }
-
-
-    /* =====================================================
-       DRIFT CONTROLS
-       ===================================================== */
 
     .controls-panel {
         order: 3;
@@ -2417,11 +2529,6 @@ a {
         width: 100%;
     }
 
-
-    /* =====================================================
-       FEATURED
-       ===================================================== */
-
     .featured-panel {
         order: 4;
 
@@ -2435,11 +2542,6 @@ a {
         overflow: hidden;
     }
 
-
-    /* =====================================================
-       VOID PICKS
-       ===================================================== */
-
     .picks-panel {
         order: 5;
 
@@ -2452,11 +2554,6 @@ a {
 
         overflow: hidden;
     }
-
-
-    /* =====================================================
-       ADVERTISEMENT
-       ===================================================== */
 
     .right-ad-panel {
         order: 6;
@@ -2492,11 +2589,6 @@ a {
         object-position: center;
     }
 
-
-    /* =====================================================
-       PREVIOUS DRIFTED
-       ===================================================== */
-
     .previous-panel {
         order: 7;
 
@@ -2510,429 +2602,10 @@ a {
         overflow: hidden;
     }
 
-
-    /* =====================================================
-       REMOVE DESKTOP COLUMN EFFECTS
-       ===================================================== */
-
     .left-column::before,
     .center-column::before,
     .right-column::before {
         display: none;
-    }
-
-}
-
-/* =========================================================
-   VOID PLAYER SURROUND
-   ========================================================= */
-
-@media (min-width: 769px) {
-
-    .player-frame {
-        position: relative;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        overflow: hidden;
-
-        background:
-            radial-gradient(
-                ellipse at center,
-                rgba(80, 0, 20, 0.22) 0%,
-                rgba(20, 0, 8, 0.45) 32%,
-                rgba(0, 0, 0, 0.92) 72%,
-                #000 100%
-            );
-    }
-
-    .player-frame::before {
-        content: "";
-
-        position: absolute;
-
-        inset: -30%;
-
-        z-index: 0;
-
-        background:
-            radial-gradient(
-                circle at 50% 50%,
-                rgba(255, 255, 255, 0.035) 0%,
-                transparent 22%
-            ),
-            radial-gradient(
-                circle at 20% 35%,
-                rgba(120, 0, 35, 0.14),
-                transparent 28%
-            ),
-            radial-gradient(
-                circle at 80% 65%,
-                rgba(120, 0, 35, 0.10),
-                transparent 28%
-            );
-
-        animation:
-            void-drift-glow
-            12s
-            ease-in-out
-            infinite alternate;
-
-        pointer-events: none;
-    }
-
-    .player-frame::after {
-        content: "";
-
-        position: absolute;
-
-        inset: 0;
-
-        z-index: 1;
-
-        pointer-events: none;
-
-        background:
-            radial-gradient(
-                ellipse at center,
-                transparent 35%,
-                rgba(0, 0, 0, 0.35) 75%,
-                rgba(0, 0, 0, 0.82) 100%
-            );
-    }
-
-    .player-frame .drift-player {
-        position: relative;
-
-        z-index: 2;
-
-        width: 100%;
-        height: auto;
-
-        aspect-ratio: 16 / 9;
-
-        max-width: 100%;
-
-        flex: 0 0 auto;
-
-        background: #000;
-
-        box-shadow:
-            0 0 0 1px
-            rgba(255, 255, 255, 0.08),
-
-            0 0 35px
-            rgba(0, 0, 0, 0.75),
-
-            0 0 70px
-            rgba(70, 0, 25, 0.18);
-
-        overflow: hidden;
-    }
-
-    .player-frame .drift-player iframe {
-        position: absolute;
-
-        inset: 0;
-
-        width: 100%;
-        height: 100%;
-
-        border: 0;
-    }
-
-    /* =====================================================
-       VOID PARTICLES
-       ===================================================== */
-
-    .player-frame {
-        --void-particle-a:
-            radial-gradient(
-                circle,
-                rgba(255,255,255,0.32) 0 1px,
-                transparent 1.5px
-            );
-
-        --void-particle-b:
-            radial-gradient(
-                circle,
-                rgba(255,255,255,0.18) 0 1px,
-                transparent 1.5px
-            );
-
-        background-image:
-            var(--void-particle-a),
-            var(--void-particle-b),
-            radial-gradient(
-                ellipse at center,
-                rgba(70, 0, 25, 0.24),
-                rgba(0, 0, 0, 0.95) 70%
-            );
-
-        background-size:
-            97px 113px,
-            151px 137px,
-            100% 100%;
-
-        background-position:
-            12px 18px,
-            71px 43px,
-            center;
-    }
-
-    @keyframes void-drift-glow {
-
-        0% {
-            transform: scale(1);
-            opacity: 0.65;
-        }
-
-        50% {
-            transform: scale(1.04);
-            opacity: 0.9;
-        }
-
-        100% {
-            transform: scale(1.08);
-            opacity: 0.65;
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   MOBILE — KEEP STREAM FULL WIDTH
-   ========================================================= */
-
-@media (max-width: 768px) {
-
-    .player-frame {
-        width: 100%;
-
-        aspect-ratio: 16 / 9;
-
-        overflow: hidden;
-    }
-
-    .player-frame .drift-player {
-        width: 100%;
-        height: 100%;
-
-        aspect-ratio: auto;
-    }
-
-}
-
-/* =========================================================
-   VOID PLAYER — TRUE 16:9 WINDOW
-   ========================================================= */
-
-@media (min-width: 769px) {
-
-    .center-column .player-frame {
-
-        position: relative;
-
-        width: 100%;
-
-        /*
-         * The frame fills the available center area.
-         * The actual stream inside it stays 16:9.
-         */
-        height:
-            calc(
-                100% - 145px
-            );
-
-        max-height: none;
-
-        aspect-ratio: auto;
-
-        display: flex;
-
-        align-items: center;
-        justify-content: center;
-
-        overflow: hidden;
-
-        border-radius: 7px;
-
-        background:
-            radial-gradient(
-                ellipse at center,
-                rgba(70, 0, 25, 0.32) 0%,
-                rgba(18, 0, 10, 0.72) 42%,
-                #000 82%
-            );
-
-        border:
-            1px solid
-            rgba(255, 255, 255, 0.12);
-
-        box-shadow:
-            inset 0 0 60px
-            rgba(90, 0, 35, 0.12),
-
-            0 18px 55px
-            rgba(0, 0, 0, 0.42);
-    }
-
-
-    /* =========================================================
-   CINEMATIC STREAM MARRIAGE
-   ========================================================= */
-
-@media (min-width: 769px) {
-
-    .center-column .player-frame {
-        position: relative;
-
-        width: 100%;
-        height: calc(100% - 145px);
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        overflow: hidden;
-
-        background: #000;
-
-        isolation: isolate;
-    }
-
-
-    /* =====================================================
-       BLURRED STREAM BACKGROUND
-    ===================================================== */
-
-    .center-column .player-frame::before {
-        content: "";
-
-        position: absolute;
-
-        inset: -12%;
-
-        z-index: 0;
-
-        background-image:
-            var(--stream-background);
-
-        background-size: cover;
-
-        background-position: center;
-
-        filter:
-            blur(28px)
-            brightness(0.42)
-            saturate(0.75);
-
-        transform: scale(1.12);
-
-        opacity: 0.95;
-
-        pointer-events: none;
-    }
-
-
-    /* =====================================================
-       CINEMATIC DARKENING
-    ===================================================== */
-
-    .center-column .player-frame::after {
-        content: "";
-
-        position: absolute;
-
-        inset: 0;
-
-        z-index: 1;
-
-        pointer-events: none;
-
-        background:
-            radial-gradient(
-                ellipse at center,
-                transparent 32%,
-                rgba(0, 0, 0, 0.18) 58%,
-                rgba(0, 0, 0, 0.62) 100%
-            );
-    }
-
-
-    /* =====================================================
-       ACTUAL STREAM
-    ===================================================== */
-
-    .center-column .player-frame .drift-player {
-        position: relative;
-
-        z-index: 2;
-
-        width: auto !important;
-
-        height: 100% !important;
-
-        aspect-ratio: 16 / 9;
-
-        flex: 0 0 auto;
-
-        overflow: hidden;
-
-        background: #000;
-
-        box-shadow:
-            0 0 0 1px
-            rgba(255, 255, 255, 0.12),
-
-            0 0 35px
-            rgba(0, 0, 0, 0.75),
-
-            0 0 80px
-            rgba(0, 0, 0, 0.45);
-    }
-
-    .center-column .player-frame .drift-player iframe {
-        display: block;
-
-        width: 100%;
-        height: 100%;
-
-        border: 0;
-    }
-
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 768px) {
-
-    .center-column .player-frame {
-        width: 100%;
-        height: auto;
-
-        aspect-ratio: 16 / 9;
-
-        overflow: hidden;
-    }
-
-    .center-column .player-frame::before,
-    .center-column .player-frame::after {
-        display: none;
-    }
-
-    .center-column .player-frame .drift-player {
-        width: 100% !important;
-        height: 100% !important;
-
-        aspect-ratio: auto;
     }
 
 }
